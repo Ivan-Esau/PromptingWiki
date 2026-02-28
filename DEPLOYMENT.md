@@ -1,20 +1,25 @@
-# GitHub Pages Deployment Guide
+# Deployment Guide (GitHub Pages + GitLab Pages)
 
 ## Hosting Model
-- Host the built Vite site on GitHub Pages using GitHub Actions.
-- Keep source on default branch (`main` or `master`).
-- Publish `dist/` via workflow artifact deployment (no `gh-pages` branch required).
+- Host the built Vite site on GitHub Pages (GitHub Actions) or GitLab Pages (GitLab CI).
+- Keep source on default branch.
+- Publish the Vite `dist/` output directory.
 
-## One-Time Repository Setup
+## GitHub One-Time Setup
 1. Go to `Settings -> Pages`.
 2. Under `Build and deployment`, set `Source` to `GitHub Actions`.
 3. Push to `main` or `master` to trigger `.github/workflows/deploy-pages.yml`.
 
+## GitLab One-Time Setup
+1. Ensure `.gitlab-ci.yml` exists in the default branch.
+2. Push to the default branch to run the `deploy_pages` job.
+3. In GitLab, open `Deploy -> Pages` to confirm the published URL.
+
 ## Base Path Rules
 - `username.github.io` repo deploys from `/`.
 - Project repo (for example `PromptingWiki`) deploys from `/<repo>/`.
-- `vite.config.ts` auto-detects this from `GITHUB_REPOSITORY`.
-- Optional override: add repository variable `VITE_BASE_PATH` (examples: `/`, `/PromptingWiki/`).
+- `vite.config.ts` auto-detects from `VITE_BASE_PATH` (manual override), `CI_PAGES_URL` (GitLab), and `GITHUB_REPOSITORY` (GitHub).
+- Optional override variable examples: `/`, `/PromptingWiki/`, `https://group.gitlab.io/project`.
 
 ## Release Workflow
 1. Develop on feature branches.
