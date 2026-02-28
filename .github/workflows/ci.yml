@@ -23,5 +23,14 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
+      - name: Validate Content
+        run: npm run content:validate
+
+      - name: Generate Content
+        run: npm run content:generate
+
+      - name: Test
+        run: npm run test
+
       - name: Build
         run: npm run build
