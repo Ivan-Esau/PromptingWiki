@@ -1,0 +1,2501 @@
+[
+  {
+    "title": "Context Management and Constraints",
+    "slug": "context-management-and-constraints",
+    "content_type": "concept",
+    "summary": "Techniques for controlling context window usage and preventing instruction conflicts in long prompts.",
+    "tags": [
+      "context",
+      "constraints",
+      "long-inputs"
+    ],
+    "task_type": [
+      "general",
+      "summarization"
+    ],
+    "technique": [
+      "context-packing",
+      "priority-ordering"
+    ],
+    "risk": [
+      "instruction-conflict",
+      "context-overflow"
+    ],
+    "provider_scope": "neutral",
+    "difficulty": "intermediate",
+    "last_reviewed": "2026-02-28",
+    "references": [
+      {
+        "label": "Google Prompt Design Best Practices",
+        "url": "https://ai.google.dev/guide/prompt_best_practices",
+        "source_type": "doc"
+      },
+      {
+        "label": "OpenAI Prompt Engineering Guide",
+        "url": "https://platform.openai.com/docs/guides/prompt-engineering",
+        "source_type": "doc"
+      }
+    ],
+    "related_pages": [
+      "long-context-summarization",
+      "citation-grounded-rag-answering",
+      "iteration-loop-with-evals"
+    ],
+    "section": "learn",
+    "subsection": "learn",
+    "body_html": "<h1 id=\"context-management-and-constraints\">Context Management and Constraints</h1>\n<p>The highest-quality prompt can still fail if context is poorly ordered or overstuffed. Context strategy should be explicit and deterministic.</p>\n<h2 id=\"prioritize-context\">Prioritize Context</h2>\n<ol>\n<li>System and policy constraints first.</li>\n<li>Task definition second.</li>\n<li>High-relevance evidence third.</li>\n<li>Supplemental examples last.</li>\n</ol>\n<h2 id=\"conflict-resolution-policy\">Conflict Resolution Policy</h2>\n<p>When context chunks conflict, force tie-breaking behavior:</p>\n<pre class=\"code-block\"><code class=\"language-text\">If two sources conflict, prefer the newest source.\nIf confidence is below 0.7, abstain and request clarification.</code></pre>\n<h2 id=\"practical-context-packing\">Practical Context Packing</h2>\n<ol>\n<li>Keep one chunk one idea.</li>\n<li>Label chunk origin and timestamp.</li>\n<li>Drop low-value context before reducing constraint text.</li>\n</ol>\n<h2 id=\"why-this-matters\">Why This Matters</h2>\n<p>Most production failures are not model capability issues; they are context hierarchy issues. Clear precedence rules reduce hallucination and inconsistent style.</p>",
+    "toc": [
+      {
+        "id": "prioritize-context",
+        "title": "Prioritize Context",
+        "depth": 2
+      },
+      {
+        "id": "conflict-resolution-policy",
+        "title": "Conflict Resolution Policy",
+        "depth": 2
+      },
+      {
+        "id": "practical-context-packing",
+        "title": "Practical Context Packing",
+        "depth": 2
+      },
+      {
+        "id": "why-this-matters",
+        "title": "Why This Matters",
+        "depth": 2
+      }
+    ],
+    "excerpt": "Context Management and Constraints The highest-quality prompt can still fail if context is poorly ordered or overstuffed. Context strategy should be explicit and deterministic. Prioritize Context System and policy constr",
+    "schema_version": 1,
+    "reading_time_minutes": 1
+  },
+  {
+    "title": "Few-Shot Example Selection",
+    "slug": "few-shot-example-selection",
+    "content_type": "concept",
+    "summary": "How to choose and format few-shot examples that teach behavior without overfitting style or format artifacts.",
+    "tags": [
+      "few-shot",
+      "examples",
+      "generalization"
+    ],
+    "task_type": [
+      "classification",
+      "extraction",
+      "summarization"
+    ],
+    "technique": [
+      "few-shot",
+      "counterexamples"
+    ],
+    "risk": [
+      "overfitting",
+      "format-leakage"
+    ],
+    "provider_scope": "neutral",
+    "difficulty": "intermediate",
+    "last_reviewed": "2026-02-28",
+    "references": [
+      {
+        "label": "Chain-of-Thought Prompting",
+        "url": "https://arxiv.org/abs/2201.11903",
+        "source_type": "paper"
+      },
+      {
+        "label": "Self-Consistency Improves Reasoning",
+        "url": "https://arxiv.org/abs/2203.11171",
+        "source_type": "paper"
+      }
+    ],
+    "related_pages": [
+      "classification-with-rubric",
+      "structured-json-extraction",
+      "task-decomposition-for-workflows"
+    ],
+    "section": "learn",
+    "subsection": "learn",
+    "body_html": "<h1 id=\"few-shot-example-selection\">Few-Shot Example Selection</h1>\n<p>Few-shot prompting should teach intent, not just mimic formatting. Example sets must represent difficult cases, not only clean cases.</p>\n<h2 id=\"selection-heuristics\">Selection Heuristics</h2>\n<ol>\n<li>Include at least one borderline case.</li>\n<li>Include at least one negative or abstain case.</li>\n<li>Keep label distributions realistic.</li>\n<li>Avoid repeating exact wording from likely live inputs.</li>\n</ol>\n<h2 id=\"example-block-pattern\">Example Block Pattern</h2>\n<pre class=\"code-block\"><code class=\"language-text\">Example 1\nInput: ...\nOutput: ...\n\nExample 2\nInput: ...\nOutput: ...</code></pre>\n<h2 id=\"anti-pattern\">Anti-Pattern</h2>\n<p>Using one perfect example creates brittle behavior. The model learns style tokens instead of decision boundaries.</p>\n<h2 id=\"review-rule\">Review Rule</h2>\n<p>Rotate examples monthly or when domain language shifts. Stale examples silently reduce production quality.</p>",
+    "toc": [
+      {
+        "id": "selection-heuristics",
+        "title": "Selection Heuristics",
+        "depth": 2
+      },
+      {
+        "id": "example-block-pattern",
+        "title": "Example Block Pattern",
+        "depth": 2
+      },
+      {
+        "id": "anti-pattern",
+        "title": "Anti-Pattern",
+        "depth": 2
+      },
+      {
+        "id": "review-rule",
+        "title": "Review Rule",
+        "depth": 2
+      }
+    ],
+    "excerpt": "Few-Shot Example Selection Few-shot prompting should teach intent, not just mimic formatting. Example sets must represent difficult cases, not only clean cases. Selection Heuristics Include at least one borderline case.",
+    "schema_version": 1,
+    "reading_time_minutes": 1
+  },
+  {
+    "title": "Iteration Loop with Evals",
+    "slug": "iteration-loop-with-evals",
+    "content_type": "concept",
+    "summary": "A repeatable cycle for changing prompts with measurable quality deltas and regression protection.",
+    "tags": [
+      "evals",
+      "iteration",
+      "quality-control"
+    ],
+    "task_type": [
+      "general"
+    ],
+    "technique": [
+      "test-driven-prompting",
+      "regression-checks"
+    ],
+    "risk": [
+      "silent-regression",
+      "overfitting-to-demo"
+    ],
+    "provider_scope": "neutral",
+    "difficulty": "intermediate",
+    "last_reviewed": "2026-02-28",
+    "references": [
+      {
+        "label": "OpenAI Evals Guide",
+        "url": "https://platform.openai.com/docs/guides/evals",
+        "source_type": "doc"
+      },
+      {
+        "label": "Anthropic Test and Evaluate",
+        "url": "https://docs.anthropic.com/en/docs/test-and-evaluate/define-success",
+        "source_type": "doc"
+      },
+      {
+        "label": "Self-Refine: Iterative Refinement with Self-Feedback",
+        "url": "https://arxiv.org/abs/2303.17651",
+        "source_type": "paper"
+      },
+      {
+        "label": "Reflexion: Language Agents with Verbal Reinforcement Learning",
+        "url": "https://arxiv.org/abs/2303.11366",
+        "source_type": "paper"
+      }
+    ],
+    "related_pages": [
+      "prompt-eval-suite-design",
+      "classification-with-rubric",
+      "support-triage-automation",
+      "self-refine-reflexion-loop"
+    ],
+    "section": "learn",
+    "subsection": "learn",
+    "body_html": "<h1 id=\"iteration-loop-with-evals\">Iteration Loop with Evals</h1>\n<p>Prompt quality improves when edits are treated like code changes: hypothesis, change, test, and rollback if needed.</p>\n<h2 id=\"loop\">Loop</h2>\n<ol>\n<li>Define target behavior with explicit pass criteria.</li>\n<li>Run baseline prompt on a fixed test set.</li>\n<li>Apply one focused prompt change.</li>\n<li>Compare metrics and qualitative failure patterns.</li>\n<li>Keep or reject change based on thresholds.</li>\n</ol>\n<h2 id=\"minimum-eval-set\">Minimum Eval Set</h2>\n<pre class=\"code-block\"><code class=\"language-text\">10 easy cases\n10 boundary cases\n10 adversarial or noisy cases</code></pre>\n<h2 id=\"decision-rule\">Decision Rule</h2>\n<p>Never ship prompt edits based only on one or two examples. Require stable gains across your regression set.</p>\n<h2 id=\"operational-note\">Operational Note</h2>\n<p>Store prompt revisions and metrics in version control so incidents can be traced to exact prompt changes.</p>",
+    "toc": [
+      {
+        "id": "loop",
+        "title": "Loop",
+        "depth": 2
+      },
+      {
+        "id": "minimum-eval-set",
+        "title": "Minimum Eval Set",
+        "depth": 2
+      },
+      {
+        "id": "decision-rule",
+        "title": "Decision Rule",
+        "depth": 2
+      },
+      {
+        "id": "operational-note",
+        "title": "Operational Note",
+        "depth": 2
+      }
+    ],
+    "excerpt": "Iteration Loop with Evals Prompt quality improves when edits are treated like code changes: hypothesis, change, test, and rollback if needed. Loop Define target behavior with explicit pass criteria. Run baseline prompt o",
+    "schema_version": 1,
+    "reading_time_minutes": 1
+  },
+  {
+    "title": "Output Schema and Format Control",
+    "slug": "output-schema-and-format-control",
+    "content_type": "concept",
+    "summary": "Designing strict output schemas and validation-friendly formats for reliable downstream automation.",
+    "tags": [
+      "schema",
+      "json",
+      "formatting",
+      "automation"
+    ],
+    "task_type": [
+      "extraction",
+      "classification",
+      "transformation"
+    ],
+    "technique": [
+      "schema-control",
+      "output-validation"
+    ],
+    "risk": [
+      "parse-failure",
+      "schema-drift"
+    ],
+    "provider_scope": "multi",
+    "difficulty": "intro",
+    "last_reviewed": "2026-02-28",
+    "references": [
+      {
+        "label": "OpenAI Structured Outputs Guide",
+        "url": "https://platform.openai.com/docs/guides/structured-outputs",
+        "source_type": "doc"
+      },
+      {
+        "label": "Anthropic Structured Data Patterns",
+        "url": "https://docs.anthropic.com/en/docs/prompt-engineering",
+        "source_type": "doc"
+      }
+    ],
+    "related_pages": [
+      "structured-json-extraction",
+      "classification-with-rubric",
+      "policy-compliance-checking"
+    ],
+    "section": "learn",
+    "subsection": "learn",
+    "body_html": "<h1 id=\"output-schema-and-format-control\">Output Schema and Format Control</h1>\n<p>If output must feed software, formatting is a reliability requirement, not a cosmetic preference.</p>\n<h2 id=\"schema-first-prompting\">Schema-first Prompting</h2>\n<ol>\n<li>Define types, required fields, and null behavior.</li>\n<li>State enum values explicitly.</li>\n<li>Forbid extra keys.</li>\n<li>Add a fallback error shape for invalid input.</li>\n</ol>\n<h2 id=\"minimal-contract-example\">Minimal Contract Example</h2>\n<pre class=\"code-block\"><code class=\"language-json\">{\n  &quot;label&quot;: &quot;allow | block | review&quot;,\n  &quot;confidence&quot;: 0.0,\n  &quot;reasons&quot;: [&quot;string&quot;]\n}</code></pre>\n<h2 id=\"parsing-guardrails\">Parsing Guardrails</h2>\n<ol>\n<li>Use deterministic keys.</li>\n<li>Keep values machine-oriented.</li>\n<li>Separate explanation from decision fields.</li>\n</ol>\n<h2 id=\"pipeline-benefit\">Pipeline Benefit</h2>\n<p>Strict schema control lets teams run exact diff checks on outputs and detect behavior regressions early.</p>",
+    "toc": [
+      {
+        "id": "schema-first-prompting",
+        "title": "Schema-first Prompting",
+        "depth": 2
+      },
+      {
+        "id": "minimal-contract-example",
+        "title": "Minimal Contract Example",
+        "depth": 2
+      },
+      {
+        "id": "parsing-guardrails",
+        "title": "Parsing Guardrails",
+        "depth": 2
+      },
+      {
+        "id": "pipeline-benefit",
+        "title": "Pipeline Benefit",
+        "depth": 2
+      }
+    ],
+    "excerpt": "Output Schema and Format Control If output must feed software, formatting is a reliability requirement, not a cosmetic preference. Schema-first Prompting Define types, required fields, and null behavior. State enum value",
+    "schema_version": 1,
+    "reading_time_minutes": 1
+  },
+  {
+    "title": "Prompt Structure Fundamentals",
+    "slug": "prompt-structure-fundamentals",
+    "content_type": "concept",
+    "summary": "How to design a stable prompt contract with objective, context, constraints, and output requirements.",
+    "tags": [
+      "fundamentals",
+      "prompt-contract",
+      "instruction-design"
+    ],
+    "task_type": [
+      "general"
+    ],
+    "technique": [
+      "instruction-clarity",
+      "constraint-framing"
+    ],
+    "risk": [
+      "ambiguity",
+      "drift"
+    ],
+    "provider_scope": "neutral",
+    "difficulty": "intro",
+    "last_reviewed": "2026-02-28",
+    "references": [
+      {
+        "label": "OpenAI Prompting Guide",
+        "url": "https://platform.openai.com/docs/guides/prompting",
+        "source_type": "doc"
+      },
+      {
+        "label": "Anthropic Prompt Engineering Overview",
+        "url": "https://docs.anthropic.com/en/docs/prompt-engineering",
+        "source_type": "doc"
+      }
+    ],
+    "related_pages": [
+      "output-schema-and-format-control",
+      "structured-json-extraction",
+      "iteration-loop-with-evals"
+    ],
+    "section": "learn",
+    "subsection": "learn",
+    "body_html": "<h1 id=\"prompt-structure-fundamentals\">Prompt Structure Fundamentals</h1>\n<p>Reliable prompts behave like contracts rather than prose. A contract defines what the model should do, what context it may use, and what output is acceptable.</p>\n<h2 id=\"core-prompt-contract\">Core Prompt Contract</h2>\n<ol>\n<li>Objective: one explicit task sentence.</li>\n<li>Context: bounded source material and assumptions.</li>\n<li>Constraints: style, policy, and refusal boundaries.</li>\n<li>Output requirements: schema, formatting, and confidence expression.</li>\n</ol>\n<h2 id=\"recommended-layout\">Recommended Layout</h2>\n<p>Use stable section headers inside your prompt so edits do not collapse intent.</p>\n<pre class=\"code-block\"><code class=\"language-text\">Objective:\nContext:\nConstraints:\nOutput Format:\nQuality Checks:</code></pre>\n<h2 id=\"common-failure-patterns\">Common Failure Patterns</h2>\n<ol>\n<li>Mixing instructions and examples without labels.</li>\n<li>Hiding constraints deep in long context.</li>\n<li>Asking for strict formatting without providing a schema.</li>\n</ol>\n<h2 id=\"practical-rule\">Practical Rule</h2>\n<p>Before running any eval, rewrite your prompt to make every instruction testable. If a reviewer cannot verify an instruction from output, the instruction is too vague.</p>",
+    "toc": [
+      {
+        "id": "core-prompt-contract",
+        "title": "Core Prompt Contract",
+        "depth": 2
+      },
+      {
+        "id": "recommended-layout",
+        "title": "Recommended Layout",
+        "depth": 2
+      },
+      {
+        "id": "common-failure-patterns",
+        "title": "Common Failure Patterns",
+        "depth": 2
+      },
+      {
+        "id": "practical-rule",
+        "title": "Practical Rule",
+        "depth": 2
+      }
+    ],
+    "excerpt": "Prompt Structure Fundamentals Reliable prompts behave like contracts rather than prose. A contract defines what the model should do, what context it may use, and what output is acceptable. Core Prompt Contract Objective:",
+    "schema_version": 1,
+    "reading_time_minutes": 1
+  },
+  {
+    "title": "Citation-Grounded RAG Answering",
+    "slug": "citation-grounded-rag-answering",
+    "content_type": "pattern",
+    "summary": "Answer questions only from retrieved context, requiring evidence citations and explicit abstention when context is insufficient.",
+    "tags": [
+      "pattern",
+      "rag",
+      "citations",
+      "grounding"
+    ],
+    "task_type": [
+      "rag",
+      "question-answering"
+    ],
+    "technique": [
+      "grounded-generation",
+      "abstention-policy"
+    ],
+    "risk": [
+      "hallucination",
+      "citation-mismatch"
+    ],
+    "provider_scope": "multi",
+    "difficulty": "advanced",
+    "last_reviewed": "2026-02-28",
+    "references": [
+      {
+        "label": "OpenAI Prompting Guide",
+        "url": "https://platform.openai.com/docs/guides/prompting",
+        "source_type": "doc"
+      },
+      {
+        "label": "OWASP Top 10 for LLM Applications",
+        "url": "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
+        "source_type": "standard"
+      },
+      {
+        "label": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+        "url": "https://arxiv.org/abs/2310.11511",
+        "source_type": "paper"
+      },
+      {
+        "label": "Corrective Retrieval Augmented Generation (CRAG)",
+        "url": "https://arxiv.org/abs/2401.15884",
+        "source_type": "paper"
+      }
+    ],
+    "related_pages": [
+      "context-management-and-constraints",
+      "policy-compliance-checking",
+      "prompt-injection-safety-checklist",
+      "rag-research-landscape-2020-2026"
+    ],
+    "section": "library",
+    "subsection": "patterns",
+    "body_html": "<h1 id=\"citation-grounded-rag-answering\">Citation-Grounded RAG Answering</h1>\n<h2 id=\"problem\">Problem</h2>\n<p>RAG answers often cite incorrect passages or answer beyond retrieved evidence.</p>\n<h2 id=\"baseline-prompt\">Baseline Prompt</h2>\n<pre class=\"code-block\"><code class=\"language-text\">Answer the user question based on the provided context.</code></pre>\n<h2 id=\"improved-prompt\">Improved Prompt</h2>\n<pre class=\"code-block\"><code class=\"language-text\">You may only answer using the retrieved context chunks.\n\nReturn JSON:\n{\n  &quot;answer&quot;: &quot;string&quot;,\n  &quot;citations&quot;: [&quot;chunk_id_1&quot;, &quot;chunk_id_2&quot;],\n  &quot;confidence&quot;: 0.00,\n  &quot;abstain&quot;: false,\n  &quot;abstain_reason&quot;: &quot;string | null&quot;\n}\n\nRules:\n- If context does not support an answer, set abstain=true.\n- Each factual claim must map to a cited chunk id.\n- Do not cite chunk ids that were not provided.</code></pre>\n<h2 id=\"why-it-works\">Why It Works</h2>\n<p>Explicit citation and abstention fields force grounded behavior and enable automated citation checks.</p>\n<h2 id=\"failure-modes\">Failure Modes</h2>\n<ol>\n<li>Citations that do not contain the claimed fact.</li>\n<li>Over-abstaining when weak but sufficient evidence exists.</li>\n<li>Confidence not aligned with citation quality.</li>\n</ol>\n<h2 id=\"eval-setup\">Eval Setup</h2>\n<p>Measure exact citation validity, abstain precision/recall, and answer faithfulness across held-out questions.</p>\n<h2 id=\"costlatency-notes\">Cost/Latency Notes</h2>\n<p>Citation validation adds post-processing but greatly improves trust in high-stakes responses.</p>\n<h2 id=\"references\">References</h2>\n<p>Combine this pattern with retrieval quality metrics. Prompt quality cannot fix missing or irrelevant retrieval data.</p>",
+    "toc": [
+      {
+        "id": "problem",
+        "title": "Problem",
+        "depth": 2
+      },
+      {
+        "id": "baseline-prompt",
+        "title": "Baseline Prompt",
+        "depth": 2
+      },
+      {
+        "id": "improved-prompt",
+        "title": "Improved Prompt",
+        "depth": 2
+      },
+      {
+        "id": "why-it-works",
+        "title": "Why It Works",
+        "depth": 2
+      },
+      {
+        "id": "failure-modes",
+        "title": "Failure Modes",
+        "depth": 2
+      },
+      {
+        "id": "eval-setup",
+        "title": "Eval Setup",
+        "depth": 2
+      },
+      {
+        "id": "costlatency-notes",
+        "title": "Cost/Latency Notes",
+        "depth": 2
+      },
+      {
+        "id": "references",
+        "title": "References",
+        "depth": 2
+      }
+    ],
+    "excerpt": "Citation-Grounded RAG Answering Problem RAG answers often cite incorrect passages or answer beyond retrieved evidence. Baseline Prompt Answer the user question based on the provided context. Improved Prompt You may only",
+    "schema_version": 1,
+    "reading_time_minutes": 1
+  },
+  {
+    "title": "Classification with Rubric",
+    "slug": "classification-with-rubric",
+    "content_type": "pattern",
+    "summary": "Improve classification consistency by forcing rubric-based decisions with confidence and evidence fields.",
+    "tags": [
+      "pattern",
+      "classification",
+      "rubric"
+    ],
+    "task_type": [
+      "classification"
+    ],
+    "technique": [
+      "rubric-scoring",
+      "confidence-calibration"
+    ],
+    "risk": [
+      "label-drift",
+      "false-confidence"
+    ],
+    "provider_scope": "neutral",
+    "difficulty": "intermediate",
+    "last_reviewed": "2026-02-28",
+    "references": [
+      {
+        "label": "OpenAI Prompt Engineering Guide",
+        "url": "https://platform.openai.com/docs/guides/prompt-engineering",
+        "source_type": "doc"
+      },
+      {
+        "label": "Anthropic Define Success Criteria",
+        "url": "https://docs.anthropic.com/en/docs/test-and-evaluate/define-success",
+        "source_type": "doc"
+      }
+    ],
+    "related_pages": [
+      "few-shot-example-selection",
+      "support-triage-automation",
+      "prompt-eval-suite-design"
+    ],
+    "section": "library",
+    "subsection": "patterns",
+    "body_html": "<h1 id=\"classification-with-rubric\">Classification with Rubric</h1>\n<h2 id=\"problem\">Problem</h2>\n<p>Raw classification prompts often produce unstable labels and unhelpful confidence text.</p>\n<h2 id=\"baseline-prompt\">Baseline Prompt</h2>\n<pre class=\"code-block\"><code class=\"language-text\">Classify the message sentiment and urgency.</code></pre>\n<h2 id=\"improved-prompt\">Improved Prompt</h2>\n<pre class=\"code-block\"><code class=\"language-text\">Task:\nClassify each message into one urgency label: low, medium, high.\n\nRubric:\n- high: blocked workflow, outage, legal/security risk, or repeated failed attempts.\n- medium: degraded experience but workaround exists.\n- low: informational or non-urgent request.\n\nReturn JSON:\n{\n  &quot;urgency&quot;: &quot;low | medium | high&quot;,\n  &quot;confidence&quot;: 0.00,\n  &quot;evidence&quot;: [&quot;quoted phrase 1&quot;, &quot;quoted phrase 2&quot;]\n}\n\nRules:\n- Use only evidence present in input.\n- If evidence is weak, lower confidence.</code></pre>\n<h2 id=\"why-it-works\">Why It Works</h2>\n<p>Rubrics turn abstract labels into explicit criteria and prevent hidden model heuristics from dominating.</p>\n<h2 id=\"failure-modes\">Failure Modes</h2>\n<ol>\n<li>Evidence quotes copied with wrong context.</li>\n<li>Confidence inflation on ambiguous requests.</li>\n<li>Class imbalance reducing minority-label recall.</li>\n</ol>\n<h2 id=\"eval-setup\">Eval Setup</h2>\n<p>Use a labeled dataset with class imbalance metrics: macro-F1, per-class recall, and confidence calibration error.</p>\n<h2 id=\"costlatency-notes\">Cost/Latency Notes</h2>\n<p>Evidence and confidence fields add tokens but speed human audit and reduce escalation errors.</p>\n<h2 id=\"references\">References</h2>\n<p>Pair this pattern with periodic few-shot refresh to keep rubric interpretation aligned with policy changes.</p>",
+    "toc": [
+      {
+        "id": "problem",
+        "title": "Problem",
+        "depth": 2
+      },
+      {
+        "id": "baseline-prompt",
+        "title": "Baseline Prompt",
+        "depth": 2
+      },
+      {
+        "id": "improved-prompt",
+        "title": "Improved Prompt",
+        "depth": 2
+      },
+      {
+        "id": "why-it-works",
+        "title": "Why It Works",
+        "depth": 2
+      },
+      {
+        "id": "failure-modes",
+        "title": "Failure Modes",
+        "depth": 2
+      },
+      {
+        "id": "eval-setup",
+        "title": "Eval Setup",
+        "depth": 2
+      },
+      {
+        "id": "costlatency-notes",
+        "title": "Cost/Latency Notes",
+        "depth": 2
+      },
+      {
+        "id": "references",
+        "title": "References",
+        "depth": 2
+      }
+    ],
+    "excerpt": "Classification with Rubric Problem Raw classification prompts often produce unstable labels and unhelpful confidence text. Baseline Prompt Classify the message sentiment and urgency. Improved Prompt Task: Classify each m",
+    "schema_version": 1,
+    "reading_time_minutes": 1
+  },
+  {
+    "title": "Document to Action Items",
+    "slug": "document-to-action-items",
+    "content_type": "use_case",
+    "summary": "Turn long meeting notes and project documents into structured action items with owners, deadlines, and uncertainty flags.",
+    "tags": [
+      "use-case",
+      "summarization",
+      "action-items"
+    ],
+    "task_type": [
+      "summarization",
+      "extraction",
+      "transformation"
+    ],
+    "technique": [
+      "hierarchical-synthesis",
+      "schema-control"
+    ],
+    "risk": [
+      "missed-actions",
+      "invented-deadlines"
+    ],
+    "provider_scope": "neutral",
+    "difficulty": "intermediate",
+    "last_reviewed": "2026-02-28",
+    "references": [
+      {
+        "label": "OpenAI Prompting Guide",
+        "url": "https://platform.openai.com/docs/guides/prompting",
+        "source_type": "doc"
+      },
+      {
+        "label": "Google Prompt Best Practices",
+        "url": "https://ai.google.dev/guide/prompt_best_practices",
+        "source_type": "doc"
+      }
+    ],
+    "related_pages": [
+      "long-context-summarization",
+      "structured-json-extraction",
+      "output-schema-and-format-control"
+    ],
+    "section": "library",
+    "subsection": "use-cases",
+    "body_html": "<h1 id=\"document-to-action-items\">Document to Action Items</h1>\n<h2 id=\"scenario-and-constraints\">Scenario and Constraints</h2>\n<p>Weekly project notes include decisions, risks, and unresolved tasks. The team needs structured actions without introducing fictional owners or deadlines.</p>\n<h2 id=\"prompt-assembly\">Prompt Assembly</h2>\n<pre class=\"code-block\"><code class=\"language-text\">Stage 1: Section summaries with decision/risk labels.\nStage 2: Action extraction in strict JSON.\nStage 3: Validation pass for missing owner or due date.</code></pre>\n<pre class=\"code-block\"><code class=\"language-json\">{\n  &quot;action&quot;: &quot;string&quot;,\n  &quot;owner&quot;: &quot;string | null&quot;,\n  &quot;due_date&quot;: &quot;YYYY-MM-DD | null&quot;,\n  &quot;source_quote&quot;: &quot;string&quot;,\n  &quot;confidence&quot;: 0.0\n}</code></pre>\n<h2 id=\"test-set\">Test Set</h2>\n<p>Build a 30-document set with manually curated action lists. Include cases where actions are implied, not explicit.</p>\n<h2 id=\"expected-output-rubric\">Expected Output Rubric</h2>\n<ol>\n<li>Action recall &gt;= 88%.</li>\n<li>Hallucinated action rate &lt;= 3%.</li>\n<li>Owner and due-date null handling correct &gt;= 95%.</li>\n</ol>\n<h2 id=\"observed-failures-and-fixes\">Observed Failures and Fixes</h2>\n<ol>\n<li>Inferred deadlines where none existed. Fix: add explicit null requirement.</li>\n<li>Over-merged action items. Fix: one actionable verb per record.</li>\n</ol>\n<h2 id=\"deployment-notes\">Deployment Notes</h2>\n<p>Show generated actions for human confirmation before syncing to ticketing systems.</p>\n<h2 id=\"references\">References</h2>\n<p>Pair this workflow with periodic manual audits to prevent drift in ownership extraction quality.</p>",
+    "toc": [
+      {
+        "id": "scenario-and-constraints",
+        "title": "Scenario and Constraints",
+        "depth": 2
+      },
+      {
+        "id": "prompt-assembly",
+        "title": "Prompt Assembly",
+        "depth": 2
+      },
+      {
+        "id": "test-set",
+        "title": "Test Set",
+        "depth": 2
+      },
+      {
+        "id": "expected-output-rubric",
+        "title": "Expected Output Rubric",
+        "depth": 2
+      },
+      {
+        "id": "observed-failures-and-fixes",
+        "title": "Observed Failures and Fixes",
+        "depth": 2
+      },
+      {
+        "id": "deployment-notes",
+        "title": "Deployment Notes",
+        "depth": 2
+      },
+      {
+        "id": "references",
+        "title": "References",
+        "depth": 2
+      }
+    ],
+    "excerpt": "Document to Action Items Scenario and Constraints Weekly project notes include decisions, risks, and unresolved tasks. The team needs structured actions without introducing fictional owners or deadlines. Prompt Assembly",
+    "schema_version": 1,
+    "reading_time_minutes": 1
+  },
+  {
+    "title": "Long-Context Summarization",
+    "slug": "long-context-summarization",
+    "content_type": "pattern",
+    "summary": "Summarize long documents using staged constraints and section-level evidence tracking to avoid omission bias.",
+    "tags": [
+      "pattern",
+      "summarization",
+      "long-context"
+    ],
+    "task_type": [
+      "summarization"
+    ],
+    "technique": [
+      "chunked-summarization",
+      "hierarchical-synthesis"
+    ],
+    "risk": [
+      "critical-omissions",
+      "hallucinated-summary"
+    ],
+    "provider_scope": "neutral",
+    "difficulty": "advanced",
+    "last_reviewed": "2026-02-28",
+    "references": [
+      {
+        "label": "OpenAI Prompting Guide",
+        "url": "https://platform.openai.com/docs/guides/prompting",
+        "source_type": "doc"
+      },
+      {
+        "label": "ReAct: Synergizing Reasoning and Acting",
+        "url": "https://arxiv.org/abs/2210.03629",
+        "source_type": "paper"
+      }
+    ],
+    "related_pages": [
+      "context-management-and-constraints",
+      "document-to-action-items",
+      "prompt-eval-suite-design"
+    ],
+    "section": "library",
+    "subsection": "patterns",
+    "body_html": "<h1 id=\"long-context-summarization\">Long-Context Summarization</h1>\n<h2 id=\"problem\">Problem</h2>\n<p>Single-pass summarization on large inputs can miss low-frequency but high-impact details.</p>\n<h2 id=\"baseline-prompt\">Baseline Prompt</h2>\n<pre class=\"code-block\"><code class=\"language-text\">Summarize the following report in bullet points.</code></pre>\n<h2 id=\"improved-prompt\">Improved Prompt</h2>\n<pre class=\"code-block\"><code class=\"language-text\">Step 1: Summarize each section separately with evidence quotes.\nStep 2: Merge section summaries into a final summary with these headings:\n- Key outcomes\n- Risks and blockers\n- Open decisions\n\nOutput rules:\n- 5 to 8 bullets total.\n- Include at least one explicit risk item.\n- Include source section labels for each bullet.</code></pre>\n<h2 id=\"why-it-works\">Why It Works</h2>\n<p>Hierarchical summarization maintains coverage and exposes where each statement comes from.</p>\n<h2 id=\"failure-modes\">Failure Modes</h2>\n<ol>\n<li>Duplicate bullets after synthesis.</li>\n<li>Over-compression hiding uncertainty.</li>\n<li>Incorrect section references.</li>\n</ol>\n<h2 id=\"eval-setup\">Eval Setup</h2>\n<p>Create gold summaries for 20 long documents. Measure fact recall, unsupported claims, and key-risk coverage.</p>\n<h2 id=\"costlatency-notes\">Cost/Latency Notes</h2>\n<p>Multi-stage prompts increase latency. Use smaller chunk windows and parallel section summarization where possible.</p>\n<h2 id=\"references\">References</h2>\n<p>Treat evidence labeling as mandatory whenever summaries drive downstream decisions.</p>",
+    "toc": [
+      {
+        "id": "problem",
+        "title": "Problem",
+        "depth": 2
+      },
+      {
+        "id": "baseline-prompt",
+        "title": "Baseline Prompt",
+        "depth": 2
+      },
+      {
+        "id": "improved-prompt",
+        "title": "Improved Prompt",
+        "depth": 2
+      },
+      {
+        "id": "why-it-works",
+        "title": "Why It Works",
+        "depth": 2
+      },
+      {
+        "id": "failure-modes",
+        "title": "Failure Modes",
+        "depth": 2
+      },
+      {
+        "id": "eval-setup",
+        "title": "Eval Setup",
+        "depth": 2
+      },
+      {
+        "id": "costlatency-notes",
+        "title": "Cost/Latency Notes",
+        "depth": 2
+      },
+      {
+        "id": "references",
+        "title": "References",
+        "depth": 2
+      }
+    ],
+    "excerpt": "Long-Context Summarization Problem Single-pass summarization on large inputs can miss low-frequency but high-impact details. Baseline Prompt Summarize the following report in bullet points. Improved Prompt Step 1: Summar",
+    "schema_version": 1,
+    "reading_time_minutes": 1
+  },
+  {
+    "title": "Policy Compliance Checking",
+    "slug": "policy-compliance-checking",
+    "content_type": "use_case",
+    "summary": "Evaluate generated or human-authored text against policy controls with citations, risk levels, and escalation triggers.",
+    "tags": [
+      "use-case",
+      "compliance",
+      "policy"
+    ],
+    "task_type": [
+      "classification",
+      "rag",
+      "quality-assurance"
+    ],
+    "technique": [
+      "rubric-scoring",
+      "grounded-generation",
+      "abstention-policy"
+    ],
+    "risk": [
+      "false-compliance",
+      "policy-mismatch"
+    ],
+    "provider_scope": "multi",
+    "difficulty": "advanced",
+    "last_reviewed": "2026-02-28",
+    "references": [
+      {
+        "label": "OWASP LLM Top 10",
+        "url": "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
+        "source_type": "standard"
+      },
+      {
+        "label": "Anthropic Prompt Engineering Overview",
+        "url": "https://docs.anthropic.com/en/docs/prompt-engineering",
+        "source_type": "doc"
+      }
+    ],
+    "related_pages": [
+      "citation-grounded-rag-answering",
+      "classification-with-rubric",
+      "prompt-injection-safety-checklist"
+    ],
+    "section": "library",
+    "subsection": "use-cases",
+    "body_html": "<h1 id=\"policy-compliance-checking\">Policy Compliance Checking</h1>\n<h2 id=\"scenario-and-constraints\">Scenario and Constraints</h2>\n<p>A moderation team reviews AI-generated outbound content against internal policy. The checker must provide evidence and avoid confident guesses when policy text is missing.</p>\n<h2 id=\"prompt-assembly\">Prompt Assembly</h2>\n<pre class=\"code-block\"><code class=\"language-text\">Input:\n- content_to_check\n- policy_chunks (id + text)\n\nOutput:\n- decision: allow | review | block\n- violated_rules: policy ids\n- rationale: short text\n- confidence: 0.00\n- abstain: true/false</code></pre>\n<p>Use <code>citation-grounded-rag-answering</code> for evidence mapping and <code>classification-with-rubric</code> for severity labels.</p>\n<h2 id=\"test-set\">Test Set</h2>\n<p>Create 75 policy-check examples with balanced allow/review/block outcomes and at least 15 low-evidence cases.</p>\n<h2 id=\"expected-output-rubric\">Expected Output Rubric</h2>\n<ol>\n<li>Policy citation precision &gt;= 95%.</li>\n<li>False allow rate &lt;= 2%.</li>\n<li>Abstain behavior triggered correctly when policy context is insufficient.</li>\n</ol>\n<h2 id=\"observed-failures-and-fixes\">Observed Failures and Fixes</h2>\n<ol>\n<li>Blocking on soft language cues. Fix: severity rubric tied to explicit rule IDs.</li>\n<li>Missing citations in long responses. Fix: enforce max rationale length and required citation array.</li>\n</ol>\n<h2 id=\"deployment-notes\">Deployment Notes</h2>\n<p>Route <code>block</code> and <code>low-confidence review</code> decisions to human approval until the regression suite remains stable for multiple releases.</p>\n<h2 id=\"references\">References</h2>\n<p>Treat policy prompts as controlled artifacts with ownership and change approval, similar to production rulesets.</p>",
+    "toc": [
+      {
+        "id": "scenario-and-constraints",
+        "title": "Scenario and Constraints",
+        "depth": 2
+      },
+      {
+        "id": "prompt-assembly",
+        "title": "Prompt Assembly",
+        "depth": 2
+      },
+      {
+        "id": "test-set",
+        "title": "Test Set",
+        "depth": 2
+      },
+      {
+        "id": "expected-output-rubric",
+        "title": "Expected Output Rubric",
+        "depth": 2
+      },
+      {
+        "id": "observed-failures-and-fixes",
+        "title": "Observed Failures and Fixes",
+        "depth": 2
+      },
+      {
+        "id": "deployment-notes",
+        "title": "Deployment Notes",
+        "depth": 2
+      },
+      {
+        "id": "references",
+        "title": "References",
+        "depth": 2
+      }
+    ],
+    "excerpt": "Policy Compliance Checking Scenario and Constraints A moderation team reviews AI-generated outbound content against internal policy. The checker must provide evidence and avoid confident guesses when policy text is missi",
+    "schema_version": 1,
+    "reading_time_minutes": 1
+  },
+  {
+    "title": "Self-Refine and Reflexion Prompt Loop",
+    "slug": "self-refine-reflexion-loop",
+    "content_type": "pattern",
+    "summary": "An iterative prompting pattern where the model critiques its output and revises it against explicit quality rubrics.",
+    "tags": [
+      "pattern",
+      "self-improvement",
+      "iteration"
+    ],
+    "task_type": [
+      "general",
+      "classification",
+      "summarization"
+    ],
+    "technique": [
+      "self-refine",
+      "reflexion",
+      "critique-loop"
+    ],
+    "risk": [
+      "error-reinforcement",
+      "verbosity-drift"
+    ],
+    "provider_scope": "neutral",
+    "difficulty": "advanced",
+    "last_reviewed": "2026-02-28",
+    "references": [
+      {
+        "label": "Self-Refine: Iterative Refinement with Self-Feedback (2023)",
+        "url": "https://arxiv.org/abs/2303.17651",
+        "source_type": "paper"
+      },
+      {
+        "label": "Reflexion: Language Agents with Verbal Reinforcement Learning (2023)",
+        "url": "https://arxiv.org/abs/2303.11366",
+        "source_type": "paper"
+      },
+      {
+        "label": "Optimization by Prompting (OPRO) (2023)",
+        "url": "https://arxiv.org/abs/2309.03409",
+        "source_type": "paper"
+      },
+      {
+        "label": "DSPy: Compiling Declarative Language Model Calls into Self-Improving Pipelines (2023)",
+        "url": "https://arxiv.org/abs/2310.03714",
+        "source_type": "paper"
+      }
+    ],
+    "related_pages": [
+      "iteration-loop-with-evals",
+      "classification-with-rubric",
+      "prompt-eval-suite-design",
+      "tool-use-planning-react-tot"
+    ],
+    "section": "library",
+    "subsection": "patterns",
+    "body_html": "<h1 id=\"self-refine-and-reflexion-prompt-loop\">Self-Refine and Reflexion Prompt Loop</h1>\n<h2 id=\"problem\">Problem</h2>\n<p>One-pass prompting leaves quality gains unrealized, especially on nuanced reasoning or structured writing tasks.</p>\n<h2 id=\"baseline-prompt\">Baseline Prompt</h2>\n<pre class=\"code-block\"><code class=\"language-text\">Produce the final answer directly.</code></pre>\n<h2 id=\"improved-prompt\">Improved Prompt</h2>\n<pre class=\"code-block\"><code class=\"language-text\">Stage A - Draft:\nGenerate an initial answer.\n\nStage B - Critique:\nEvaluate the draft against this rubric:\n- correctness\n- completeness\n- policy compliance\n- schema validity\n\nStage C - Revision:\nRevise the answer using critique findings.\n\nReturn JSON:\n{\n  &quot;draft&quot;: &quot;string&quot;,\n  &quot;critique&quot;: [&quot;string&quot;],\n  &quot;final&quot;: &quot;string&quot;,\n  &quot;confidence&quot;: 0.0\n}</code></pre>\n<h2 id=\"why-it-works\">Why It Works</h2>\n<p>Structured self-critique shifts the model from generation-only mode to detect-and-correct mode before final output.</p>\n<h2 id=\"failure-modes\">Failure Modes</h2>\n<ol>\n<li>Critique copies draft language without real error detection.</li>\n<li>Revisions increase length but not correctness.</li>\n<li>Iteration loops overfit style while content errors remain.</li>\n</ol>\n<h2 id=\"eval-setup\">Eval Setup</h2>\n<p>Measure pre/post revision deltas on fixed tasks with human-verified answers. Track improvements in factual correctness and schema conformance.</p>\n<h2 id=\"costlatency-notes\">Cost/Latency Notes</h2>\n<p>Each iteration adds cost. Cap at 1 to 2 refinement rounds unless measurable gains justify more.</p>\n<h2 id=\"references\">References</h2>\n<p>Treat self-refine loops as a controlled optimization step with clear stop criteria and measurable gains.</p>",
+    "toc": [
+      {
+        "id": "problem",
+        "title": "Problem",
+        "depth": 2
+      },
+      {
+        "id": "baseline-prompt",
+        "title": "Baseline Prompt",
+        "depth": 2
+      },
+      {
+        "id": "improved-prompt",
+        "title": "Improved Prompt",
+        "depth": 2
+      },
+      {
+        "id": "why-it-works",
+        "title": "Why It Works",
+        "depth": 2
+      },
+      {
+        "id": "failure-modes",
+        "title": "Failure Modes",
+        "depth": 2
+      },
+      {
+        "id": "eval-setup",
+        "title": "Eval Setup",
+        "depth": 2
+      },
+      {
+        "id": "costlatency-notes",
+        "title": "Cost/Latency Notes",
+        "depth": 2
+      },
+      {
+        "id": "references",
+        "title": "References",
+        "depth": 2
+      }
+    ],
+    "excerpt": "Self-Refine and Reflexion Prompt Loop Problem One-pass prompting leaves quality gains unrealized, especially on nuanced reasoning or structured writing tasks. Baseline Prompt Produce the final answer directly. Improved P",
+    "schema_version": 1,
+    "reading_time_minutes": 1
+  },
+  {
+    "title": "Software Engineering Agent Loop",
+    "slug": "software-engineering-agent-loop",
+    "content_type": "use_case",
+    "summary": "A code-agent workflow for issue resolution with test-driven prompting, patch verification, and rollback safety gates.",
+    "tags": [
+      "use-case",
+      "software-engineering",
+      "agents"
+    ],
+    "task_type": [
+      "automation",
+      "coding"
+    ],
+    "technique": [
+      "decomposition",
+      "test-driven-prompting",
+      "reflective-repair"
+    ],
+    "risk": [
+      "regression",
+      "incorrect-patch",
+      "unsafe-edits"
+    ],
+    "provider_scope": "neutral",
+    "difficulty": "advanced",
+    "last_reviewed": "2026-02-28",
+    "references": [
+      {
+        "label": "SWE-bench: Can Language Models Resolve Real-World GitHub Issues? (2023)",
+        "url": "https://arxiv.org/abs/2310.06770",
+        "source_type": "paper"
+      },
+      {
+        "label": "SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering (2024)",
+        "url": "https://arxiv.org/abs/2405.15793",
+        "source_type": "paper"
+      },
+      {
+        "label": "MLGym: A New Framework and Benchmark for Advancing AI Research Agents (2025)",
+        "url": "https://arxiv.org/abs/2502.14499",
+        "source_type": "paper"
+      },
+      {
+        "label": "AgentBench: Evaluating LLMs as Agents (2023)",
+        "url": "https://arxiv.org/abs/2308.03688",
+        "source_type": "paper"
+      }
+    ],
+    "related_pages": [
+      "task-decomposition-for-workflows",
+      "self-refine-reflexion-loop",
+      "agentic-evaluation-harness",
+      "prompt-eval-suite-design"
+    ],
+    "section": "library",
+    "subsection": "use-cases",
+    "body_html": "<h1 id=\"software-engineering-agent-loop\">Software Engineering Agent Loop</h1>\n<h2 id=\"scenario-and-constraints\">Scenario and Constraints</h2>\n<p>A coding agent must resolve incoming bug issues with minimal regressions and transparent change rationale.</p>\n<h2 id=\"prompt-assembly\">Prompt Assembly</h2>\n<pre class=\"code-block\"><code class=\"language-text\">Workflow:\n1) Reproduce issue from ticket and tests.\n2) Propose patch plan with risk estimate.\n3) Apply minimal code change.\n4) Run targeted and full test suites.\n5) If tests fail, enter one repair loop and explain root cause.\n\nOutput:\n- patch summary\n- changed files\n- tests executed\n- residual risk</code></pre>\n<h2 id=\"test-set\">Test Set</h2>\n<pre class=\"code-block\"><code class=\"language-text\">Use a held-out issue set with:\n- small bug fixes\n- API compatibility fixes\n- flaky or incomplete test scenarios</code></pre>\n<h2 id=\"expected-output-rubric\">Expected Output Rubric</h2>\n<ol>\n<li>Issue resolution accuracy (benchmark-defined).</li>\n<li>Regression rate in unaffected tests.</li>\n<li>Patch minimality and explainability.</li>\n</ol>\n<h2 id=\"observed-failures-and-fixes\">Observed Failures and Fixes</h2>\n<ol>\n<li>Overly broad refactors. Fix: prompt-level file-scope constraints.</li>\n<li>Passing local tests but failing integration. Fix: mandatory expanded verification phase.</li>\n</ol>\n<h2 id=\"deployment-notes\">Deployment Notes</h2>\n<p>Use shadow-mode patch proposals first, then gated auto-apply only for low-risk classes.</p>\n<h2 id=\"references\">References</h2>\n<p>Combine benchmark-style evaluation with repository-specific guardrails; public benchmarks alone are insufficient.</p>",
+    "toc": [
+      {
+        "id": "scenario-and-constraints",
+        "title": "Scenario and Constraints",
+        "depth": 2
+      },
+      {
+        "id": "prompt-assembly",
+        "title": "Prompt Assembly",
+        "depth": 2
+      },
+      {
+        "id": "test-set",
+        "title": "Test Set",
+        "depth": 2
+      },
+      {
+        "id": "expected-output-rubric",
+        "title": "Expected Output Rubric",
+        "depth": 2
+      },
+      {
+        "id": "observed-failures-and-fixes",
+        "title": "Observed Failures and Fixes",
+        "depth": 2
+      },
+      {
+        "id": "deployment-notes",
+        "title": "Deployment Notes",
+        "depth": 2
+      },
+      {
+        "id": "references",
+        "title": "References",
+        "depth": 2
+      }
+    ],
+    "excerpt": "Software Engineering Agent Loop Scenario and Constraints A coding agent must resolve incoming bug issues with minimal regressions and transparent change rationale. Prompt Assembly Workflow: 1) Reproduce issue from ticket",
+    "schema_version": 1,
+    "reading_time_minutes": 1
+  },
+  {
+    "title": "Structured JSON Extraction",
+    "slug": "structured-json-extraction",
+    "content_type": "pattern",
+    "summary": "Extract structured entities from unstructured text using strict schema constraints and deterministic fallback behavior.",
+    "tags": [
+      "pattern",
+      "json",
+      "extraction"
+    ],
+    "task_type": [
+      "extraction",
+      "transformation"
+    ],
+    "technique": [
+      "schema-control",
+      "field-level-constraints"
+    ],
+    "risk": [
+      "invalid-json",
+      "missing-fields"
+    ],
+    "provider_scope": "multi",
+    "difficulty": "intermediate",
+    "last_reviewed": "2026-02-28",
+    "references": [
+      {
+        "label": "OpenAI Structured Outputs Guide",
+        "url": "https://platform.openai.com/docs/guides/structured-outputs",
+        "source_type": "doc"
+      },
+      {
+        "label": "Google Prompt Best Practices",
+        "url": "https://ai.google.dev/guide/prompt_best_practices",
+        "source_type": "doc"
+      }
+    ],
+    "related_pages": [
+      "output-schema-and-format-control",
+      "document-to-action-items",
+      "prompt-eval-suite-design"
+    ],
+    "section": "library",
+    "subsection": "patterns",
+    "body_html": "<h1 id=\"structured-json-extraction\">Structured JSON Extraction</h1>\n<h2 id=\"problem\">Problem</h2>\n<p>Free-form outputs break automation. Teams need deterministic fields from messy input text.</p>\n<h2 id=\"baseline-prompt\">Baseline Prompt</h2>\n<pre class=\"code-block\"><code class=\"language-text\">Extract the important details from this message and return JSON.</code></pre>\n<h2 id=\"improved-prompt\">Improved Prompt</h2>\n<pre class=\"code-block\"><code class=\"language-text\">Objective:\nExtract support ticket fields from the input.\n\nInput:\n{{ticket_text}}\n\nOutput Format (strict JSON only):\n{\n  &quot;customer_id&quot;: &quot;string | null&quot;,\n  &quot;issue_type&quot;: &quot;billing | access | performance | other&quot;,\n  &quot;priority&quot;: &quot;low | medium | high&quot;,\n  &quot;summary&quot;: &quot;string&quot;,\n  &quot;needs_human_followup&quot;: true\n}\n\nRules:\n- Return valid JSON only.\n- Do not add extra keys.\n- If value is missing, return null and explain why in summary.</code></pre>\n<h2 id=\"why-it-works\">Why It Works</h2>\n<p>Schema-enforced prompts reduce structural variance and make parsing failures observable.</p>\n<h2 id=\"failure-modes\">Failure Modes</h2>\n<ol>\n<li>Enum values outside allowed set.</li>\n<li>Long summaries that hide uncertainty.</li>\n<li>Null overuse when clues exist in input.</li>\n</ol>\n<h2 id=\"eval-setup\">Eval Setup</h2>\n<p>Create 40 tickets with known labels. Check parse rate, enum validity, and label accuracy.</p>\n<h2 id=\"costlatency-notes\">Cost/Latency Notes</h2>\n<p>Strict outputs may increase token count, but they lower downstream exception handling and retries.</p>\n<h2 id=\"references\">References</h2>\n<p>Use schema-native API features where possible, then keep prompt-level schema text as defense-in-depth.</p>",
+    "toc": [
+      {
+        "id": "problem",
+        "title": "Problem",
+        "depth": 2
+      },
+      {
+        "id": "baseline-prompt",
+        "title": "Baseline Prompt",
+        "depth": 2
+      },
+      {
+        "id": "improved-prompt",
+        "title": "Improved Prompt",
+        "depth": 2
+      },
+      {
+        "id": "why-it-works",
+        "title": "Why It Works",
+        "depth": 2
+      },
+      {
+        "id": "failure-modes",
+        "title": "Failure Modes",
+        "depth": 2
+      },
+      {
+        "id": "eval-setup",
+        "title": "Eval Setup",
+        "depth": 2
+      },
+      {
+        "id": "costlatency-notes",
+        "title": "Cost/Latency Notes",
+        "depth": 2
+      },
+      {
+        "id": "references",
+        "title": "References",
+        "depth": 2
+      }
+    ],
+    "excerpt": "Structured JSON Extraction Problem Free-form outputs break automation. Teams need deterministic fields from messy input text. Baseline Prompt Extract the important details from this message and return JSON. Improved Prom",
+    "schema_version": 1,
+    "reading_time_minutes": 1
+  },
+  {
+    "title": "Support Triage Automation",
+    "slug": "support-triage-automation",
+    "content_type": "use_case",
+    "summary": "A production-oriented support triage workflow combining extraction, rubric classification, and escalation policies.",
+    "tags": [
+      "use-case",
+      "support",
+      "triage"
+    ],
+    "task_type": [
+      "classification",
+      "extraction",
+      "automation"
+    ],
+    "technique": [
+      "rubric-scoring",
+      "schema-control",
+      "decomposition"
+    ],
+    "risk": [
+      "misrouting",
+      "false-priority"
+    ],
+    "provider_scope": "neutral",
+    "difficulty": "intermediate",
+    "last_reviewed": "2026-02-28",
+    "references": [
+      {
+        "label": "OpenAI Evals Guide",
+        "url": "https://platform.openai.com/docs/guides/evals",
+        "source_type": "doc"
+      },
+      {
+        "label": "Anthropic Build Empirical Tests",
+        "url": "https://docs.anthropic.com/en/docs/build-with-claude/develop-tests",
+        "source_type": "doc"
+      }
+    ],
+    "related_pages": [
+      "classification-with-rubric",
+      "structured-json-extraction",
+      "task-decomposition-for-workflows",
+      "prompt-eval-suite-design"
+    ],
+    "section": "library",
+    "subsection": "use-cases",
+    "body_html": "<h1 id=\"support-triage-automation\">Support Triage Automation</h1>\n<h2 id=\"scenario-and-constraints\">Scenario and Constraints</h2>\n<p>A support inbox receives mixed billing, outage, and account-access requests. The team needs deterministic queue routing with low false-high-priority rates.</p>\n<h2 id=\"prompt-assembly\">Prompt Assembly</h2>\n<ol>\n<li>Extract key fields with <code>structured-json-extraction</code>.</li>\n<li>Assign urgency with <code>classification-with-rubric</code>.</li>\n<li>Run final quality gate with <code>task-decomposition-for-workflows</code>.</li>\n</ol>\n<pre class=\"code-block\"><code class=\"language-text\">Input: raw ticket text + account metadata.\nOutput: JSON with issue_type, urgency, routing_queue, escalation_reason.\nHard rule: high urgency requires quoted evidence.</code></pre>\n<h2 id=\"test-set\">Test Set</h2>\n<pre class=\"code-block\"><code class=\"language-text\">120 tickets:\n- 40 billing\n- 40 access\n- 40 product/performance\nInclude 25 ambiguous cases and 20 intentionally noisy tickets.</code></pre>\n<h2 id=\"expected-output-rubric\">Expected Output Rubric</h2>\n<ol>\n<li>Routing queue accuracy &gt;= 92%.</li>\n<li>High-priority precision &gt;= 90%.</li>\n<li>JSON parse success = 100%.</li>\n</ol>\n<h2 id=\"observed-failures-and-fixes\">Observed Failures and Fixes</h2>\n<ol>\n<li>False high-priority on emotional language. Fix: require policy trigger phrases.</li>\n<li>Missing account context. Fix: add metadata section with explicit null behavior.</li>\n</ol>\n<h2 id=\"deployment-notes\">Deployment Notes</h2>\n<p>Ship behind shadow mode first. Compare automation output against human triage for one full week before active routing.</p>\n<h2 id=\"references\">References</h2>\n<p>Keep escalation policy versioned with prompt revisions. Policy drift causes silent quality decay.</p>",
+    "toc": [
+      {
+        "id": "scenario-and-constraints",
+        "title": "Scenario and Constraints",
+        "depth": 2
+      },
+      {
+        "id": "prompt-assembly",
+        "title": "Prompt Assembly",
+        "depth": 2
+      },
+      {
+        "id": "test-set",
+        "title": "Test Set",
+        "depth": 2
+      },
+      {
+        "id": "expected-output-rubric",
+        "title": "Expected Output Rubric",
+        "depth": 2
+      },
+      {
+        "id": "observed-failures-and-fixes",
+        "title": "Observed Failures and Fixes",
+        "depth": 2
+      },
+      {
+        "id": "deployment-notes",
+        "title": "Deployment Notes",
+        "depth": 2
+      },
+      {
+        "id": "references",
+        "title": "References",
+        "depth": 2
+      }
+    ],
+    "excerpt": "Support Triage Automation Scenario and Constraints A support inbox receives mixed billing, outage, and account-access requests. The team needs deterministic queue routing with low false-high-priority rates. Prompt Assemb",
+    "schema_version": 1,
+    "reading_time_minutes": 1
+  },
+  {
+    "title": "Task Decomposition for Workflows",
+    "slug": "task-decomposition-for-workflows",
+    "content_type": "pattern",
+    "summary": "Break multi-step business tasks into explicit subtasks with intermediate checks before final output generation.",
+    "tags": [
+      "pattern",
+      "decomposition",
+      "workflow"
+    ],
+    "task_type": [
+      "general",
+      "automation"
+    ],
+    "technique": [
+      "step-planning",
+      "intermediate-validation"
+    ],
+    "risk": [
+      "skipped-steps",
+      "error-propagation"
+    ],
+    "provider_scope": "neutral",
+    "difficulty": "advanced",
+    "last_reviewed": "2026-02-28",
+    "references": [
+      {
+        "label": "ReAct: Synergizing Reasoning and Acting",
+        "url": "https://arxiv.org/abs/2210.03629",
+        "source_type": "paper"
+      },
+      {
+        "label": "Large Language Models are Zero-Shot Reasoners",
+        "url": "https://arxiv.org/abs/2205.11916",
+        "source_type": "paper"
+      },
+      {
+        "label": "Tree of Thoughts: Deliberate Problem Solving with LLMs",
+        "url": "https://arxiv.org/abs/2305.10601",
+        "source_type": "paper"
+      },
+      {
+        "label": "Plan-and-Solve Prompting",
+        "url": "https://arxiv.org/abs/2305.04091",
+        "source_type": "paper"
+      }
+    ],
+    "related_pages": [
+      "few-shot-example-selection",
+      "support-triage-automation",
+      "document-to-action-items",
+      "tool-use-planning-react-tot",
+      "agentic-frameworks-research-2023-2026"
+    ],
+    "section": "library",
+    "subsection": "patterns",
+    "body_html": "<h1 id=\"task-decomposition-for-workflows\">Task Decomposition for Workflows</h1>\n<h2 id=\"problem\">Problem</h2>\n<p>Single-prompt workflows can hide reasoning errors and make debugging impossible.</p>\n<h2 id=\"baseline-prompt\">Baseline Prompt</h2>\n<pre class=\"code-block\"><code class=\"language-text\">Read the request and generate the final action plan.</code></pre>\n<h2 id=\"improved-prompt\">Improved Prompt</h2>\n<pre class=\"code-block\"><code class=\"language-text\">Perform this in stages and show each stage output:\n1) Intent extraction\n2) Constraint detection\n3) Action plan generation\n4) Quality check against constraints\n\nReturn JSON:\n{\n  &quot;intent&quot;: &quot;string&quot;,\n  &quot;constraints&quot;: [&quot;string&quot;],\n  &quot;action_plan&quot;: [&quot;string&quot;],\n  &quot;quality_check&quot;: {\n    &quot;passes_constraints&quot;: true,\n    &quot;issues&quot;: [&quot;string&quot;]\n  }\n}</code></pre>\n<h2 id=\"why-it-works\">Why It Works</h2>\n<p>Decomposition makes failures local and testable. Each stage can be evaluated separately.</p>\n<h2 id=\"failure-modes\">Failure Modes</h2>\n<ol>\n<li>Intermediate stages becoming too verbose.</li>\n<li>Quality check rubber-stamping invalid plans.</li>\n<li>Downstream systems ignoring stage-level flags.</li>\n</ol>\n<h2 id=\"eval-setup\">Eval Setup</h2>\n<p>Score stage-level accuracy first, then final plan usefulness. Regression-test each stage independently.</p>\n<h2 id=\"costlatency-notes\">Cost/Latency Notes</h2>\n<p>Stage outputs increase tokens but reduce incident triage time by exposing where errors entered.</p>\n<h2 id=\"references\">References</h2>\n<p>Use decomposition only when workflow complexity justifies extra latency and review overhead.</p>",
+    "toc": [
+      {
+        "id": "problem",
+        "title": "Problem",
+        "depth": 2
+      },
+      {
+        "id": "baseline-prompt",
+        "title": "Baseline Prompt",
+        "depth": 2
+      },
+      {
+        "id": "improved-prompt",
+        "title": "Improved Prompt",
+        "depth": 2
+      },
+      {
+        "id": "why-it-works",
+        "title": "Why It Works",
+        "depth": 2
+      },
+      {
+        "id": "failure-modes",
+        "title": "Failure Modes",
+        "depth": 2
+      },
+      {
+        "id": "eval-setup",
+        "title": "Eval Setup",
+        "depth": 2
+      },
+      {
+        "id": "costlatency-notes",
+        "title": "Cost/Latency Notes",
+        "depth": 2
+      },
+      {
+        "id": "references",
+        "title": "References",
+        "depth": 2
+      }
+    ],
+    "excerpt": "Task Decomposition for Workflows Problem Single-prompt workflows can hide reasoning errors and make debugging impossible. Baseline Prompt Read the request and generate the final action plan. Improved Prompt Perform this",
+    "schema_version": 1,
+    "reading_time_minutes": 1
+  },
+  {
+    "title": "Tool-Use Planning with ReAct and Tree-of-Thought",
+    "slug": "tool-use-planning-react-tot",
+    "content_type": "pattern",
+    "summary": "A planning prompt pattern for multi-step tasks that combines ReAct tool calls with deliberate branching and verification.",
+    "tags": [
+      "pattern",
+      "agentic",
+      "planning",
+      "tool-use"
+    ],
+    "task_type": [
+      "automation",
+      "rag",
+      "question-answering"
+    ],
+    "technique": [
+      "react",
+      "tree-of-thought",
+      "plan-and-solve"
+    ],
+    "risk": [
+      "tool-misuse",
+      "premature-commitment",
+      "hallucination"
+    ],
+    "provider_scope": "neutral",
+    "difficulty": "advanced",
+    "last_reviewed": "2026-02-28",
+    "references": [
+      {
+        "label": "ReAct: Synergizing Reasoning and Acting in Language Models (2022)",
+        "url": "https://arxiv.org/abs/2210.03629",
+        "source_type": "paper"
+      },
+      {
+        "label": "Tree of Thoughts: Deliberate Problem Solving with LLMs (2023)",
+        "url": "https://arxiv.org/abs/2305.10601",
+        "source_type": "paper"
+      },
+      {
+        "label": "Plan-and-Solve Prompting (2023)",
+        "url": "https://arxiv.org/abs/2305.04091",
+        "source_type": "paper"
+      },
+      {
+        "label": "Large Language Models are Zero-Shot Reasoners (2022)",
+        "url": "https://arxiv.org/abs/2205.11916",
+        "source_type": "paper"
+      }
+    ],
+    "related_pages": [
+      "citation-grounded-rag-answering",
+      "task-decomposition-for-workflows",
+      "web-agent-task-execution",
+      "agentic-evaluation-harness"
+    ],
+    "section": "library",
+    "subsection": "patterns",
+    "body_html": "<h1 id=\"tool-use-planning-with-react-and-tree-of-thought\">Tool-Use Planning with ReAct and Tree-of-Thought</h1>\n<h2 id=\"problem\">Problem</h2>\n<p>Agentic prompts often fail because they choose the first plausible tool action without explicit plan verification.</p>\n<h2 id=\"baseline-prompt\">Baseline Prompt</h2>\n<pre class=\"code-block\"><code class=\"language-text\">Use available tools to solve the user task and return the final answer.</code></pre>\n<h2 id=\"improved-prompt\">Improved Prompt</h2>\n<pre class=\"code-block\"><code class=\"language-text\">You are an agent with tools.\n\nStep 1: Build a 3-step candidate plan.\nStep 2: Generate 2 alternative plans for difficult steps.\nStep 3: Choose one plan using evidence quality and tool cost.\nStep 4: Execute ReAct loop:\n- Thought: what to do next\n- Action: tool_name(arguments)\n- Observation: tool result\nStep 5: Before final answer, run a verification pass:\n- Are claims grounded in observations?\n- Are citations or tool outputs sufficient?\n\nReturn JSON:\n{\n  &quot;plan&quot;: [&quot;...&quot;],\n  &quot;actions&quot;: [{&quot;tool&quot;: &quot;string&quot;, &quot;purpose&quot;: &quot;string&quot;}],\n  &quot;answer&quot;: &quot;string&quot;,\n  &quot;verification&quot;: {&quot;grounded&quot;: true, &quot;issues&quot;: [&quot;string&quot;]}\n}</code></pre>\n<h2 id=\"why-it-works\">Why It Works</h2>\n<p>This pattern separates planning from execution and introduces explicit branch exploration before committing to a tool path.</p>\n<h2 id=\"failure-modes\">Failure Modes</h2>\n<ol>\n<li>Over-planning causes unnecessary latency.</li>\n<li>Tool observations are ignored when model priors are strong.</li>\n<li>Verification becomes superficial if no hard checks are included.</li>\n</ol>\n<h2 id=\"eval-setup\">Eval Setup</h2>\n<p>Evaluate on tasks requiring at least two tools and one external knowledge lookup. Score success, groundedness, and tool efficiency.</p>\n<h2 id=\"costlatency-notes\">Cost/Latency Notes</h2>\n<p>Branching and verification increase token and tool usage. Constrain branch count and require early-stop conditions.</p>\n<h2 id=\"references\">References</h2>\n<p>Use this pattern for high-stakes tasks where tool traces and reproducibility matter more than minimal latency.</p>",
+    "toc": [
+      {
+        "id": "problem",
+        "title": "Problem",
+        "depth": 2
+      },
+      {
+        "id": "baseline-prompt",
+        "title": "Baseline Prompt",
+        "depth": 2
+      },
+      {
+        "id": "improved-prompt",
+        "title": "Improved Prompt",
+        "depth": 2
+      },
+      {
+        "id": "why-it-works",
+        "title": "Why It Works",
+        "depth": 2
+      },
+      {
+        "id": "failure-modes",
+        "title": "Failure Modes",
+        "depth": 2
+      },
+      {
+        "id": "eval-setup",
+        "title": "Eval Setup",
+        "depth": 2
+      },
+      {
+        "id": "costlatency-notes",
+        "title": "Cost/Latency Notes",
+        "depth": 2
+      },
+      {
+        "id": "references",
+        "title": "References",
+        "depth": 2
+      }
+    ],
+    "excerpt": "Tool-Use Planning with ReAct and Tree-of-Thought Problem Agentic prompts often fail because they choose the first plausible tool action without explicit plan verification. Baseline Prompt Use available tools to solve the",
+    "schema_version": 1,
+    "reading_time_minutes": 1
+  },
+  {
+    "title": "Web Agent Task Execution",
+    "slug": "web-agent-task-execution",
+    "content_type": "use_case",
+    "summary": "A web-navigation agent workflow for enterprise tasks with explicit planning, action constraints, and replayable traces.",
+    "tags": [
+      "use-case",
+      "agents",
+      "web-automation"
+    ],
+    "task_type": [
+      "automation",
+      "agentic"
+    ],
+    "technique": [
+      "react",
+      "tool-constraint",
+      "trace-verification"
+    ],
+    "risk": [
+      "unsafe-clicks",
+      "context-loss",
+      "tool-looping"
+    ],
+    "provider_scope": "neutral",
+    "difficulty": "advanced",
+    "last_reviewed": "2026-02-28",
+    "references": [
+      {
+        "label": "WebArena: A Realistic Web Environment for Building Autonomous Agents (2023)",
+        "url": "https://arxiv.org/abs/2307.13854",
+        "source_type": "paper"
+      },
+      {
+        "label": "Mind2Web: Towards a Generalist Agent for the Web (2023)",
+        "url": "https://arxiv.org/abs/2306.06070",
+        "source_type": "paper"
+      },
+      {
+        "label": "OSWorld: Benchmarking Multimodal Agents for Open-Ended Tasks in Real Computer Environments (2024)",
+        "url": "https://arxiv.org/abs/2404.07972",
+        "source_type": "paper"
+      },
+      {
+        "label": "AgentBench: Evaluating LLMs as Agents (2023)",
+        "url": "https://arxiv.org/abs/2308.03688",
+        "source_type": "paper"
+      }
+    ],
+    "related_pages": [
+      "tool-use-planning-react-tot",
+      "task-decomposition-for-workflows",
+      "agentic-evaluation-harness",
+      "agent-memory-privacy-controls"
+    ],
+    "section": "library",
+    "subsection": "use-cases",
+    "body_html": "<h1 id=\"web-agent-task-execution\">Web Agent Task Execution</h1>\n<h2 id=\"scenario-and-constraints\">Scenario and Constraints</h2>\n<p>An operations team needs an agent to complete browser tasks such as account updates and report downloads. The workflow must be auditable and permission-scoped.</p>\n<h2 id=\"prompt-assembly\">Prompt Assembly</h2>\n<pre class=\"code-block\"><code class=\"language-text\">System constraints:\n- Allowed tools: browser_navigate, browser_click, browser_type, browser_read\n- Forbidden actions: payment submission, account deletion, role changes\n\nAgent policy:\n1) Plan steps before acting.\n2) Execute one action at a time.\n3) Capture observation after each action.\n4) Stop and request review on high-risk pages.</code></pre>\n<h2 id=\"test-set\">Test Set</h2>\n<pre class=\"code-block\"><code class=\"language-text\">40 browser tasks:\n- 20 straightforward\n- 10 ambiguous navigation\n- 10 adversarial UI changes</code></pre>\n<h2 id=\"expected-output-rubric\">Expected Output Rubric</h2>\n<ol>\n<li>Task completion rate &gt;= 80%.</li>\n<li>Safety policy violations = 0.</li>\n<li>Full step trace logged for every attempt.</li>\n</ol>\n<h2 id=\"observed-failures-and-fixes\">Observed Failures and Fixes</h2>\n<ol>\n<li>Action loops on dynamic pages. Fix: add max-repeat guard.</li>\n<li>Unsafe form submissions. Fix: hard denylist plus human confirmation checkpoints.</li>\n</ol>\n<h2 id=\"deployment-notes\">Deployment Notes</h2>\n<p>Start with read-only tasks in production and introduce write actions only after stable safety metrics.</p>\n<h2 id=\"references\">References</h2>\n<p>Benchmark web agents in environments with dynamic UI and adversarial noise, not only static demos.</p>",
+    "toc": [
+      {
+        "id": "scenario-and-constraints",
+        "title": "Scenario and Constraints",
+        "depth": 2
+      },
+      {
+        "id": "prompt-assembly",
+        "title": "Prompt Assembly",
+        "depth": 2
+      },
+      {
+        "id": "test-set",
+        "title": "Test Set",
+        "depth": 2
+      },
+      {
+        "id": "expected-output-rubric",
+        "title": "Expected Output Rubric",
+        "depth": 2
+      },
+      {
+        "id": "observed-failures-and-fixes",
+        "title": "Observed Failures and Fixes",
+        "depth": 2
+      },
+      {
+        "id": "deployment-notes",
+        "title": "Deployment Notes",
+        "depth": 2
+      },
+      {
+        "id": "references",
+        "title": "References",
+        "depth": 2
+      }
+    ],
+    "excerpt": "Web Agent Task Execution Scenario and Constraints An operations team needs an agent to complete browser tasks such as account updates and report downloads. The workflow must be auditable and permission-scoped. Prompt Ass",
+    "schema_version": 1,
+    "reading_time_minutes": 1
+  },
+  {
+    "title": "Agent Memory and Privacy Controls",
+    "slug": "agent-memory-privacy-controls",
+    "content_type": "safety",
+    "summary": "Safety controls for memory-enabled agents, including instruction hierarchy, data minimization, and privacy-preserving traces.",
+    "tags": [
+      "safety",
+      "agents",
+      "memory",
+      "privacy"
+    ],
+    "task_type": [
+      "security",
+      "agentic"
+    ],
+    "technique": [
+      "instruction-hierarchy",
+      "memory-scoping",
+      "audit-logging"
+    ],
+    "risk": [
+      "data-leakage",
+      "memory-poisoning",
+      "privilege-escalation"
+    ],
+    "provider_scope": "neutral",
+    "difficulty": "advanced",
+    "last_reviewed": "2026-02-28",
+    "references": [
+      {
+        "label": "Prompt Injection Attack against LLM-integrated Applications (2023)",
+        "url": "https://arxiv.org/abs/2306.05499",
+        "source_type": "paper"
+      },
+      {
+        "label": "The Instruction Hierarchy: Training LLMs to Prioritize Privileged Instructions (2024)",
+        "url": "https://arxiv.org/abs/2404.13208",
+        "source_type": "paper"
+      },
+      {
+        "label": "A Survey on Data Leakage in LLMs (2025)",
+        "url": "https://arxiv.org/abs/2502.13172",
+        "source_type": "paper"
+      },
+      {
+        "label": "A Survey on Privacy in LLMs and AIGC Systems (2025)",
+        "url": "https://arxiv.org/abs/2502.08966",
+        "source_type": "paper"
+      }
+    ],
+    "related_pages": [
+      "prompt-injection-safety-checklist",
+      "citation-grounded-rag-answering",
+      "web-agent-task-execution",
+      "safety-and-jailbreak-research-2023-2026"
+    ],
+    "section": "operate",
+    "subsection": "operate",
+    "body_html": "<h1 id=\"agent-memory-and-privacy-controls\">Agent Memory and Privacy Controls</h1>\n<h2 id=\"threat-model\">Threat Model</h2>\n<p>Memory-enabled agents introduce additional attack surfaces:</p>\n<ol>\n<li>Prompt injection into long-term memory.</li>\n<li>Sensitive data retention beyond intended scope.</li>\n<li>Retrieval of stale or policy-invalid memory entries.</li>\n</ol>\n<h2 id=\"controls\">Controls</h2>\n<ol>\n<li>Scope memory by task, tenant, and retention window.</li>\n<li>Store instruction provenance with each memory item.</li>\n<li>Apply redaction and secret detection before persistence.</li>\n<li>Enforce instruction hierarchy so untrusted memory cannot override system policy.</li>\n</ol>\n<h2 id=\"failure-handling\">Failure Handling</h2>\n<p>When memory safety checks fail:</p>\n<ol>\n<li>Drop or quarantine suspicious memory entries.</li>\n<li>Return safe fallback output without privileged actions.</li>\n<li>Trigger audit event with trace hash and policy reason.</li>\n<li>Require human review before memory is reinstated.</li>\n</ol>\n<h2 id=\"references\">References</h2>\n<p>Treat agent memory as regulated data storage with explicit lifecycle, provenance, and deletion guarantees.</p>",
+    "toc": [
+      {
+        "id": "threat-model",
+        "title": "Threat Model",
+        "depth": 2
+      },
+      {
+        "id": "controls",
+        "title": "Controls",
+        "depth": 2
+      },
+      {
+        "id": "failure-handling",
+        "title": "Failure Handling",
+        "depth": 2
+      },
+      {
+        "id": "references",
+        "title": "References",
+        "depth": 2
+      }
+    ],
+    "excerpt": "Agent Memory and Privacy Controls Threat Model Memory-enabled agents introduce additional attack surfaces: Prompt injection into long-term memory. Sensitive data retention beyond intended scope. Retrieval of stale or pol",
+    "schema_version": 1,
+    "reading_time_minutes": 1
+  },
+  {
+    "title": "Prompt Injection Safety Checklist",
+    "slug": "prompt-injection-safety-checklist",
+    "content_type": "safety",
+    "summary": "Operational checklist for defending prompt pipelines against instruction override, context leakage, and unsafe tool actions.",
+    "tags": [
+      "safety",
+      "prompt-injection",
+      "operations"
+    ],
+    "task_type": [
+      "security",
+      "quality-assurance"
+    ],
+    "technique": [
+      "instruction-hierarchy",
+      "input-sanitization",
+      "tool-guardrails"
+    ],
+    "risk": [
+      "prompt-injection",
+      "data-leakage",
+      "unsafe-tool-use"
+    ],
+    "provider_scope": "neutral",
+    "difficulty": "advanced",
+    "last_reviewed": "2026-02-28",
+    "references": [
+      {
+        "label": "OWASP Top 10 for LLM Applications",
+        "url": "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
+        "source_type": "standard"
+      },
+      {
+        "label": "OpenAI Prompt Engineering Guide",
+        "url": "https://platform.openai.com/docs/guides/prompt-engineering",
+        "source_type": "doc"
+      },
+      {
+        "label": "Prompt Injection Attack against LLM-integrated Applications (2023)",
+        "url": "https://arxiv.org/abs/2306.05499",
+        "source_type": "paper"
+      },
+      {
+        "label": "The Instruction Hierarchy: Training LLMs to Prioritize Privileged Instructions (2024)",
+        "url": "https://arxiv.org/abs/2404.13208",
+        "source_type": "paper"
+      }
+    ],
+    "related_pages": [
+      "citation-grounded-rag-answering",
+      "policy-compliance-checking",
+      "prompt-eval-suite-design",
+      "agent-memory-privacy-controls",
+      "safety-and-jailbreak-research-2023-2026"
+    ],
+    "section": "operate",
+    "subsection": "operate",
+    "body_html": "<h1 id=\"prompt-injection-safety-checklist\">Prompt Injection Safety Checklist</h1>\n<h2 id=\"threat-model\">Threat Model</h2>\n<p>Identify where untrusted instructions can enter:</p>\n<ol>\n<li>User input fields.</li>\n<li>Retrieved documents.</li>\n<li>Tool output from external systems.</li>\n<li>Browser or web-scraped content.</li>\n</ol>\n<h2 id=\"controls\">Controls</h2>\n<ol>\n<li>Keep trusted instructions in system-level prompt and never concatenate blindly with user text.</li>\n<li>Label untrusted text boundaries explicitly.</li>\n<li>Restrict tool permissions with allowlists and parameter validation.</li>\n<li>Enforce response schema so unsafe outputs can be caught automatically.</li>\n</ol>\n<h2 id=\"failure-handling\">Failure Handling</h2>\n<p>If injection is detected or suspected:</p>\n<ol>\n<li>Return a safe abstain response.</li>\n<li>Log triggering input and model output for incident review.</li>\n<li>Disable risky tools for the session.</li>\n<li>Re-run with high-safety prompt profile.</li>\n</ol>\n<h2 id=\"references\">References</h2>\n<p>Treat prompt injection as an application security concern, not only a prompting concern. Controls should be layered across prompt, retrieval, and tool execution.</p>",
+    "toc": [
+      {
+        "id": "threat-model",
+        "title": "Threat Model",
+        "depth": 2
+      },
+      {
+        "id": "controls",
+        "title": "Controls",
+        "depth": 2
+      },
+      {
+        "id": "failure-handling",
+        "title": "Failure Handling",
+        "depth": 2
+      },
+      {
+        "id": "references",
+        "title": "References",
+        "depth": 2
+      }
+    ],
+    "excerpt": "Prompt Injection Safety Checklist Threat Model Identify where untrusted instructions can enter: User input fields. Retrieved documents. Tool output from external systems. Browser or web-scraped content. Controls Keep tru",
+    "schema_version": 1,
+    "reading_time_minutes": 1
+  },
+  {
+    "title": "Agent Benchmark Research 2023-2026",
+    "slug": "agent-benchmark-research-2023-2026",
+    "content_type": "reference",
+    "summary": "Primary benchmarks used to evaluate agentic systems on web tasks, software engineering, and open-ended assistant behavior.",
+    "tags": [
+      "references",
+      "benchmarks",
+      "agents",
+      "evaluation"
+    ],
+    "task_type": [
+      "agentic",
+      "quality-assurance"
+    ],
+    "technique": [
+      "benchmarking",
+      "trace-evaluation"
+    ],
+    "risk": [
+      "benchmark-overfitting"
+    ],
+    "provider_scope": "neutral",
+    "difficulty": "advanced",
+    "last_reviewed": "2026-02-28",
+    "references": [
+      {
+        "label": "AgentBench: Evaluating LLMs as Agents (2023)",
+        "url": "https://arxiv.org/abs/2308.03688",
+        "source_type": "paper"
+      },
+      {
+        "label": "WebArena: A Realistic Web Environment for Building Autonomous Agents (2023)",
+        "url": "https://arxiv.org/abs/2307.13854",
+        "source_type": "paper"
+      },
+      {
+        "label": "Mind2Web: Towards a Generalist Agent for the Web (2023)",
+        "url": "https://arxiv.org/abs/2306.06070",
+        "source_type": "paper"
+      },
+      {
+        "label": "SWE-bench: Can Language Models Resolve Real-World GitHub Issues? (2023)",
+        "url": "https://arxiv.org/abs/2310.06770",
+        "source_type": "paper"
+      },
+      {
+        "label": "OSWorld: Benchmarking Multimodal Agents for Open-Ended Tasks in Real Computer Environments (2024)",
+        "url": "https://arxiv.org/abs/2404.07972",
+        "source_type": "paper"
+      },
+      {
+        "label": "SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering (2024)",
+        "url": "https://arxiv.org/abs/2405.15793",
+        "source_type": "paper"
+      },
+      {
+        "label": "GAIA: A Benchmark for General AI Assistants (2023)",
+        "url": "https://arxiv.org/abs/2311.12983",
+        "source_type": "paper"
+      },
+      {
+        "label": "MLGym: A New Framework and Benchmark for Advancing AI Research Agents (2025)",
+        "url": "https://arxiv.org/abs/2502.14499",
+        "source_type": "paper"
+      }
+    ],
+    "related_pages": [
+      "agentic-evaluation-harness",
+      "web-agent-task-execution",
+      "software-engineering-agent-loop",
+      "prompt-eval-suite-design"
+    ],
+    "section": "references",
+    "subsection": "references",
+    "body_html": "<h1 id=\"agent-benchmark-research-2023-2026\">Agent Benchmark Research 2023-2026</h1>\n<p>Benchmark coverage is essential because agent quality depends on environment interaction, not only final text outputs.</p>\n<h2 id=\"benchmark-families\">Benchmark Families</h2>\n<ol>\n<li>Web interaction benchmarks: WebArena and Mind2Web.</li>\n<li>Software engineering benchmarks: SWE-bench and SWE-agent setups.</li>\n<li>Broad assistant tasks: AgentBench and GAIA.</li>\n<li>Research-agent workflows: MLGym.</li>\n</ol>\n<h2 id=\"evaluation-lessons\">Evaluation Lessons</h2>\n<ol>\n<li>Final success rate alone hides critical safety and trace-quality failures.</li>\n<li>Benchmarks vary in realism, observability, and action-space difficulty.</li>\n<li>Production evaluation should blend benchmark tasks with internal domain tasks.</li>\n</ol>\n<h2 id=\"practical-mapping-in-this-wiki\">Practical Mapping in This Wiki</h2>\n<p>Use this collection to design:</p>\n<ol>\n<li>Agentic eval harness thresholds.</li>\n<li>Release gates for automation risk.</li>\n<li>Trace-level regression dashboards.</li>\n</ol>",
+    "toc": [
+      {
+        "id": "benchmark-families",
+        "title": "Benchmark Families",
+        "depth": 2
+      },
+      {
+        "id": "evaluation-lessons",
+        "title": "Evaluation Lessons",
+        "depth": 2
+      },
+      {
+        "id": "practical-mapping-in-this-wiki",
+        "title": "Practical Mapping in This Wiki",
+        "depth": 2
+      }
+    ],
+    "excerpt": "Agent Benchmark Research 2023-2026 Benchmark coverage is essential because agent quality depends on environment interaction, not only final text outputs. Benchmark Families Web interaction benchmarks: WebArena and Mind2W",
+    "schema_version": 1,
+    "reading_time_minutes": 1
+  },
+  {
+    "title": "Agentic Frameworks Research 2023-2026",
+    "slug": "agentic-frameworks-research-2023-2026",
+    "content_type": "reference",
+    "summary": "Key research papers behind modern single-agent and multi-agent framework design, orchestration, and optimization.",
+    "tags": [
+      "references",
+      "agents",
+      "frameworks",
+      "agentic-ai"
+    ],
+    "task_type": [
+      "agentic",
+      "automation"
+    ],
+    "technique": [
+      "multi-agent",
+      "orchestration",
+      "training"
+    ],
+    "risk": [
+      "coordination-failure",
+      "planning-instability"
+    ],
+    "provider_scope": "neutral",
+    "difficulty": "advanced",
+    "last_reviewed": "2026-02-28",
+    "references": [
+      {
+        "label": "CAMEL: Communicative Agents for Mind Exploration (2023)",
+        "url": "https://arxiv.org/abs/2303.17760",
+        "source_type": "paper"
+      },
+      {
+        "label": "Voyager: An Open-Ended Embodied Agent with LLMs (2023)",
+        "url": "https://arxiv.org/abs/2305.16291",
+        "source_type": "paper"
+      },
+      {
+        "label": "MetaGPT: Meta Programming for Multi-Agent Collaborative Framework (2023)",
+        "url": "https://arxiv.org/abs/2308.00352",
+        "source_type": "paper"
+      },
+      {
+        "label": "AutoGen: Enabling Next-Gen LLM Applications via Multi-Agent Conversation (2023)",
+        "url": "https://arxiv.org/abs/2308.08155",
+        "source_type": "paper"
+      },
+      {
+        "label": "Agent Lightning: Train ANY AI Agents with Reinforcement Learning (2025)",
+        "url": "https://arxiv.org/abs/2508.03680",
+        "source_type": "paper"
+      },
+      {
+        "label": "A Survey on Large Language Model based Autonomous Agents (2025)",
+        "url": "https://arxiv.org/abs/2503.16416",
+        "source_type": "paper"
+      }
+    ],
+    "related_pages": [
+      "tool-use-planning-react-tot",
+      "task-decomposition-for-workflows",
+      "software-engineering-agent-loop",
+      "web-agent-task-execution"
+    ],
+    "section": "references",
+    "subsection": "references",
+    "body_html": "<h1 id=\"agentic-frameworks-research-2023-2026\">Agentic Frameworks Research 2023-2026</h1>\n<p>This reference map covers the transition from prompt-only systems to orchestrated agent frameworks.</p>\n<h2 id=\"single-agent-to-multi-agent-progression\">Single-Agent to Multi-Agent Progression</h2>\n<ol>\n<li>CAMEL and AutoGen introduced explicit agent-role communication as a first-class mechanism.</li>\n<li>MetaGPT extended this into software-style team workflows with specialized roles.</li>\n<li>Voyager showed long-horizon skill accumulation in embodied settings.</li>\n</ol>\n<h2 id=\"key-design-dimensions\">Key Design Dimensions</h2>\n<ol>\n<li>Role decomposition and communication protocol.</li>\n<li>Memory design and retrieval policy.</li>\n<li>Tool interface and action safety constraints.</li>\n<li>Feedback and optimization loop design.</li>\n</ol>\n<h2 id=\"2025-direction\">2025+ Direction</h2>\n<p>Recent work emphasizes training and optimization of agent behavior, not just handcrafted prompting. This shifts effort toward measurable policy learning loops.</p>\n<h2 id=\"practical-mapping-in-this-wiki\">Practical Mapping in This Wiki</h2>\n<p>These papers inform:</p>\n<ol>\n<li>ReAct and planning prompts.</li>\n<li>Multi-step workflow orchestration patterns.</li>\n<li>Agentic evaluation harness design.</li>\n</ol>",
+    "toc": [
+      {
+        "id": "single-agent-to-multi-agent-progression",
+        "title": "Single-Agent to Multi-Agent Progression",
+        "depth": 2
+      },
+      {
+        "id": "key-design-dimensions",
+        "title": "Key Design Dimensions",
+        "depth": 2
+      },
+      {
+        "id": "2025-direction",
+        "title": "2025+ Direction",
+        "depth": 2
+      },
+      {
+        "id": "practical-mapping-in-this-wiki",
+        "title": "Practical Mapping in This Wiki",
+        "depth": 2
+      }
+    ],
+    "excerpt": "Agentic Frameworks Research 2023-2026 This reference map covers the transition from prompt-only systems to orchestrated agent frameworks. Single-Agent to Multi-Agent Progression CAMEL and AutoGen introduced explicit agen",
+    "schema_version": 1,
+    "reading_time_minutes": 1
+  },
+  {
+    "title": "Multi-Agent Collaboration and Risk Research 2025",
+    "slug": "multi-agent-collaboration-risk-research-2025",
+    "content_type": "reference",
+    "summary": "Recent 2025 research on multi-agent collaboration, architecture choices, and risk analysis for production deployments.",
+    "tags": [
+      "references",
+      "multi-agent",
+      "risk",
+      "architecture"
+    ],
+    "task_type": [
+      "agentic",
+      "automation"
+    ],
+    "technique": [
+      "multi-agent-orchestration",
+      "risk-analysis"
+    ],
+    "risk": [
+      "coordination-failure",
+      "emergent-misbehavior"
+    ],
+    "provider_scope": "neutral",
+    "difficulty": "advanced",
+    "last_reviewed": "2026-02-28",
+    "references": [
+      {
+        "label": "A Survey on Multi-Agent Systems in LLMs: Taxonomy, Applications, and Future Directions (2025)",
+        "url": "https://arxiv.org/abs/2501.06322",
+        "source_type": "paper"
+      },
+      {
+        "label": "Large Language Model Based Multi-Agents: A Survey of Progress and Challenges (2025)",
+        "url": "https://arxiv.org/abs/2502.14996",
+        "source_type": "paper"
+      },
+      {
+        "label": "Risks and Mitigation Strategies for LLM-based Multi-Agent Systems (2025)",
+        "url": "https://arxiv.org/abs/2502.14847",
+        "source_type": "paper"
+      },
+      {
+        "label": "On the Alignment and Safety of LLM-based Agents (2025)",
+        "url": "https://arxiv.org/abs/2503.13713",
+        "source_type": "paper"
+      }
+    ],
+    "related_pages": [
+      "agentic-frameworks-research-2023-2026",
+      "agent-memory-privacy-controls",
+      "web-agent-task-execution",
+      "software-engineering-agent-loop"
+    ],
+    "section": "references",
+    "subsection": "references",
+    "body_html": "<h1 id=\"multi-agent-collaboration-and-risk-research-2025\">Multi-Agent Collaboration and Risk Research 2025</h1>\n<p>Recent work moved beyond agent capability into coordination quality and systemic risk.</p>\n<h2 id=\"main-research-themes\">Main Research Themes</h2>\n<ol>\n<li>Taxonomies for role allocation and communication patterns.</li>\n<li>Coordination pathologies such as role collapse and feedback loops.</li>\n<li>Safety and alignment concerns unique to interacting agent teams.</li>\n<li>Governance and observability requirements for production orchestration.</li>\n</ol>\n<h2 id=\"practical-takeaways\">Practical Takeaways</h2>\n<ol>\n<li>Multi-agent setups should justify themselves with measurable task decomposition gains.</li>\n<li>Shared memory and message buses need strict policy boundaries.</li>\n<li>Evaluation must capture team-level behaviors, not only final output quality.</li>\n</ol>\n<h2 id=\"practical-mapping-in-this-wiki\">Practical Mapping in This Wiki</h2>\n<p>Use this reference set when designing:</p>\n<ol>\n<li>Multi-step orchestration prompts.</li>\n<li>Agent memory and privacy controls.</li>\n<li>Team-level safety and eval requirements.</li>\n</ol>",
+    "toc": [
+      {
+        "id": "main-research-themes",
+        "title": "Main Research Themes",
+        "depth": 2
+      },
+      {
+        "id": "practical-takeaways",
+        "title": "Practical Takeaways",
+        "depth": 2
+      },
+      {
+        "id": "practical-mapping-in-this-wiki",
+        "title": "Practical Mapping in This Wiki",
+        "depth": 2
+      }
+    ],
+    "excerpt": "Multi-Agent Collaboration and Risk Research 2025 Recent work moved beyond agent capability into coordination quality and systemic risk. Main Research Themes Taxonomies for role allocation and communication patterns. Coor",
+    "schema_version": 1,
+    "reading_time_minutes": 1
+  },
+  {
+    "title": "Prompt Research 2022-2026",
+    "slug": "prompt-research-2022-2026",
+    "content_type": "reference",
+    "summary": "Curated scientific backbone for modern prompting methods from chain-of-thought to prompt optimization frameworks.",
+    "tags": [
+      "references",
+      "prompting",
+      "research"
+    ],
+    "task_type": [
+      "general"
+    ],
+    "technique": [
+      "cot",
+      "self-consistency",
+      "prompt-optimization"
+    ],
+    "risk": [
+      "misapplied-techniques"
+    ],
+    "provider_scope": "neutral",
+    "difficulty": "intermediate",
+    "last_reviewed": "2026-02-28",
+    "references": [
+      {
+        "label": "Chain-of-Thought Prompting Elicits Reasoning in LLMs (2022)",
+        "url": "https://arxiv.org/abs/2201.11903",
+        "source_type": "paper"
+      },
+      {
+        "label": "Self-Consistency Improves Chain of Thought Reasoning (2022)",
+        "url": "https://arxiv.org/abs/2203.11171",
+        "source_type": "paper"
+      },
+      {
+        "label": "Least-to-Most Prompting Enables Complex Reasoning (2022)",
+        "url": "https://arxiv.org/abs/2205.10625",
+        "source_type": "paper"
+      },
+      {
+        "label": "ReAct: Synergizing Reasoning and Acting in LMs (2022)",
+        "url": "https://arxiv.org/abs/2210.03629",
+        "source_type": "paper"
+      },
+      {
+        "label": "Tree of Thoughts: Deliberate Problem Solving with LLMs (2023)",
+        "url": "https://arxiv.org/abs/2305.10601",
+        "source_type": "paper"
+      },
+      {
+        "label": "Optimization by Prompting (OPRO) (2023)",
+        "url": "https://arxiv.org/abs/2309.03409",
+        "source_type": "paper"
+      },
+      {
+        "label": "DSPy: Compiling Declarative LM Calls into Self-Improving Pipelines (2023)",
+        "url": "https://arxiv.org/abs/2310.03714",
+        "source_type": "paper"
+      },
+      {
+        "label": "A Systematic Survey of Prompt Engineering in Large Language Models (2024/2025 update)",
+        "url": "https://arxiv.org/abs/2402.07927",
+        "source_type": "paper"
+      }
+    ],
+    "related_pages": [
+      "prompt-structure-fundamentals",
+      "few-shot-example-selection",
+      "self-refine-reflexion-loop",
+      "tool-use-planning-react-tot"
+    ],
+    "section": "references",
+    "subsection": "references",
+    "body_html": "<h1 id=\"prompt-research-2022-2026\">Prompt Research 2022-2026</h1>\n<p>This page tracks the core scientific progression of prompting methods and how they map to practical production patterns.</p>\n<h2 id=\"foundational-reasoning-methods\">Foundational Reasoning Methods</h2>\n<ol>\n<li>Chain-of-thought established explicit intermediate reasoning as a useful prompting scaffold.</li>\n<li>Self-consistency improved reliability by sampling and selecting across multiple reasoning paths.</li>\n<li>Least-to-most prompting formalized decomposition from simpler subproblems to harder targets.</li>\n</ol>\n<h2 id=\"planning-and-acting-extensions\">Planning and Acting Extensions</h2>\n<ol>\n<li>ReAct introduced structured thought-action-observation loops for tool use.</li>\n<li>Tree of Thoughts introduced deliberate branch exploration before final commitment.</li>\n<li>These ideas directly support modern agentic prompting and workflow decomposition.</li>\n</ol>\n<h2 id=\"prompt-optimization-and-compilation\">Prompt Optimization and Compilation</h2>\n<ol>\n<li>OPRO showed that prompts can be optimized as objective-driven artifacts.</li>\n<li>DSPy reframed prompt engineering as a compilable pipeline with measurable improvements.</li>\n<li>Survey work in 2024 to 2025 consolidated best practices and failure patterns for practitioners.</li>\n</ol>\n<h2 id=\"practical-mapping-in-this-wiki\">Practical Mapping in This Wiki</h2>\n<p>Use these papers to inform:</p>\n<ol>\n<li>Prompt contract design.</li>\n<li>Iterative refinement loops.</li>\n<li>Planning prompts for tool-augmented agents.</li>\n</ol>",
+    "toc": [
+      {
+        "id": "foundational-reasoning-methods",
+        "title": "Foundational Reasoning Methods",
+        "depth": 2
+      },
+      {
+        "id": "planning-and-acting-extensions",
+        "title": "Planning and Acting Extensions",
+        "depth": 2
+      },
+      {
+        "id": "prompt-optimization-and-compilation",
+        "title": "Prompt Optimization and Compilation",
+        "depth": 2
+      },
+      {
+        "id": "practical-mapping-in-this-wiki",
+        "title": "Practical Mapping in This Wiki",
+        "depth": 2
+      }
+    ],
+    "excerpt": "Prompt Research 2022-2026 This page tracks the core scientific progression of prompting methods and how they map to practical production patterns. Foundational Reasoning Methods Chain-of-thought established explicit inte",
+    "schema_version": 1,
+    "reading_time_minutes": 1
+  },
+  {
+    "title": "RAG Research Landscape 2020-2026",
+    "slug": "rag-research-landscape-2020-2026",
+    "content_type": "reference",
+    "summary": "Scientific references for retrieval-augmented generation, including grounding, corrective retrieval, and graph-based retrieval.",
+    "tags": [
+      "references",
+      "rag",
+      "grounding",
+      "retrieval"
+    ],
+    "task_type": [
+      "rag",
+      "question-answering"
+    ],
+    "technique": [
+      "retrieval-augmentation",
+      "self-rag",
+      "graph-rag"
+    ],
+    "risk": [
+      "ungrounded-answers",
+      "retrieval-errors"
+    ],
+    "provider_scope": "neutral",
+    "difficulty": "advanced",
+    "last_reviewed": "2026-02-28",
+    "references": [
+      {
+        "label": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks (2020)",
+        "url": "https://arxiv.org/abs/2005.11401",
+        "source_type": "paper"
+      },
+      {
+        "label": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection (2023)",
+        "url": "https://arxiv.org/abs/2310.11511",
+        "source_type": "paper"
+      },
+      {
+        "label": "Corrective Retrieval Augmented Generation (CRAG) (2024)",
+        "url": "https://arxiv.org/abs/2401.15884",
+        "source_type": "paper"
+      },
+      {
+        "label": "From Local to Global: A GraphRAG Approach to Query-Focused Summarization (2024)",
+        "url": "https://arxiv.org/abs/2404.16130",
+        "source_type": "paper"
+      },
+      {
+        "label": "Retrieval-Augmented Generation for LLMs: A Survey (2023)",
+        "url": "https://arxiv.org/abs/2312.10997",
+        "source_type": "paper"
+      },
+      {
+        "label": "GraphRAG: A Survey (2024)",
+        "url": "https://arxiv.org/abs/2408.08921",
+        "source_type": "paper"
+      }
+    ],
+    "related_pages": [
+      "citation-grounded-rag-answering",
+      "policy-compliance-checking",
+      "tool-use-planning-react-tot",
+      "agent-memory-privacy-controls"
+    ],
+    "section": "references",
+    "subsection": "references",
+    "body_html": "<h1 id=\"rag-research-landscape-2020-2026\">RAG Research Landscape 2020-2026</h1>\n<p>RAG methods evolved from simple retrieval-then-generation pipelines to reflective and graph-structured retrieval systems.</p>\n<h2 id=\"core-progression\">Core Progression</h2>\n<ol>\n<li>Original RAG established external knowledge grounding for generation.</li>\n<li>Self-RAG added self-reflection about retrieval sufficiency.</li>\n<li>CRAG introduced corrective retrieval mechanisms when evidence is weak.</li>\n<li>GraphRAG approaches improved global-context synthesis over connected evidence.</li>\n</ol>\n<h2 id=\"implementation-implications\">Implementation Implications</h2>\n<ol>\n<li>Prompt design must include retrieval confidence and abstention behavior.</li>\n<li>Evaluation must separately score retrieval quality and answer faithfulness.</li>\n<li>Citation quality is a first-class metric, not optional metadata.</li>\n</ol>\n<h2 id=\"practical-mapping-in-this-wiki\">Practical Mapping in This Wiki</h2>\n<p>These works directly support:</p>\n<ol>\n<li>Citation-grounded answering patterns.</li>\n<li>Policy compliance workflows requiring explicit evidence.</li>\n<li>Safety controls for untrusted retrieval contexts.</li>\n</ol>",
+    "toc": [
+      {
+        "id": "core-progression",
+        "title": "Core Progression",
+        "depth": 2
+      },
+      {
+        "id": "implementation-implications",
+        "title": "Implementation Implications",
+        "depth": 2
+      },
+      {
+        "id": "practical-mapping-in-this-wiki",
+        "title": "Practical Mapping in This Wiki",
+        "depth": 2
+      }
+    ],
+    "excerpt": "RAG Research Landscape 2020-2026 RAG methods evolved from simple retrieval-then-generation pipelines to reflective and graph-structured retrieval systems. Core Progression Original RAG established external knowledge grou",
+    "schema_version": 1,
+    "reading_time_minutes": 1
+  },
+  {
+    "title": "Safety and Jailbreak Research 2023-2026",
+    "slug": "safety-and-jailbreak-research-2023-2026",
+    "content_type": "reference",
+    "summary": "Research references on prompt injection, jailbreak strategies, instruction hierarchy, and privacy risks in LLM systems.",
+    "tags": [
+      "references",
+      "safety",
+      "jailbreak",
+      "security"
+    ],
+    "task_type": [
+      "security",
+      "quality-assurance"
+    ],
+    "technique": [
+      "instruction-hierarchy",
+      "adversarial-testing",
+      "defense-in-depth"
+    ],
+    "risk": [
+      "prompt-injection",
+      "jailbreak",
+      "data-leakage"
+    ],
+    "provider_scope": "neutral",
+    "difficulty": "advanced",
+    "last_reviewed": "2026-02-28",
+    "references": [
+      {
+        "label": "Prompt Injection Attack against LLM-integrated Applications (2023)",
+        "url": "https://arxiv.org/abs/2306.05499",
+        "source_type": "paper"
+      },
+      {
+        "label": "Universal and Transferable Adversarial Attacks on Aligned Language Models (2023)",
+        "url": "https://arxiv.org/abs/2307.15043",
+        "source_type": "paper"
+      },
+      {
+        "label": "Jailbreaking Black Box LLMs in Twenty Queries (PAIR) (2023)",
+        "url": "https://arxiv.org/abs/2312.02119",
+        "source_type": "paper"
+      },
+      {
+        "label": "Many-shot Jailbreaking (2024)",
+        "url": "https://arxiv.org/abs/2401.05566",
+        "source_type": "paper"
+      },
+      {
+        "label": "The Instruction Hierarchy: Training LLMs to Prioritize Privileged Instructions (2024)",
+        "url": "https://arxiv.org/abs/2404.13208",
+        "source_type": "paper"
+      },
+      {
+        "label": "A Survey on Data Leakage in LLMs (2025)",
+        "url": "https://arxiv.org/abs/2502.13172",
+        "source_type": "paper"
+      },
+      {
+        "label": "A Survey on Privacy in LLMs and AIGC Systems (2025)",
+        "url": "https://arxiv.org/abs/2502.08966",
+        "source_type": "paper"
+      },
+      {
+        "label": "OWASP Top 10 for Large Language Model Applications",
+        "url": "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
+        "source_type": "standard"
+      }
+    ],
+    "related_pages": [
+      "prompt-injection-safety-checklist",
+      "agent-memory-privacy-controls",
+      "policy-compliance-checking",
+      "agentic-evaluation-harness"
+    ],
+    "section": "references",
+    "subsection": "references",
+    "body_html": "<h1 id=\"safety-and-jailbreak-research-2023-2026\">Safety and Jailbreak Research 2023-2026</h1>\n<p>This reference set anchors defensive prompting and agent guardrails in empirical attack and mitigation research.</p>\n<h2 id=\"attack-families\">Attack Families</h2>\n<ol>\n<li>Prompt injection through untrusted context and tool outputs.</li>\n<li>Jailbreak optimization attacks against alignment policies.</li>\n<li>Query-efficient black-box attack strategies.</li>\n<li>Long-context abuse patterns such as many-shot jailbreaks.</li>\n</ol>\n<h2 id=\"defense-directions\">Defense Directions</h2>\n<ol>\n<li>Instruction hierarchy and privilege separation.</li>\n<li>Structured output contracts with policy checks.</li>\n<li>Continuous adversarial evaluation with release gates.</li>\n<li>Memory and data lifecycle controls for privacy.</li>\n</ol>\n<h2 id=\"practical-mapping-in-this-wiki\">Practical Mapping in This Wiki</h2>\n<p>Apply these works to:</p>\n<ol>\n<li>Prompt injection checklists.</li>\n<li>Agent memory and privacy controls.</li>\n<li>Safety metrics in agentic eval harnesses.</li>\n</ol>",
+    "toc": [
+      {
+        "id": "attack-families",
+        "title": "Attack Families",
+        "depth": 2
+      },
+      {
+        "id": "defense-directions",
+        "title": "Defense Directions",
+        "depth": 2
+      },
+      {
+        "id": "practical-mapping-in-this-wiki",
+        "title": "Practical Mapping in This Wiki",
+        "depth": 2
+      }
+    ],
+    "excerpt": "Safety and Jailbreak Research 2023-2026 This reference set anchors defensive prompting and agent guardrails in empirical attack and mitigation research. Attack Families Prompt injection through untrusted context and tool",
+    "schema_version": 1,
+    "reading_time_minutes": 1
+  },
+  {
+    "title": "Scientific Agent Research 2025-2026",
+    "slug": "scientific-agent-research-2025-2026",
+    "content_type": "reference",
+    "summary": "Emerging research on autonomous scientific and research agents, including benchmarks, laboratories, and governance concerns.",
+    "tags": [
+      "references",
+      "scientific-agents",
+      "research-agents"
+    ],
+    "task_type": [
+      "agentic",
+      "research"
+    ],
+    "technique": [
+      "scientific-workflows",
+      "autonomous-experimentation"
+    ],
+    "risk": [
+      "invalid-conclusions",
+      "unsafe-automation"
+    ],
+    "provider_scope": "neutral",
+    "difficulty": "advanced",
+    "last_reviewed": "2026-02-28",
+    "references": [
+      {
+        "label": "MLGym: A New Framework and Benchmark for Advancing AI Research Agents (2025)",
+        "url": "https://arxiv.org/abs/2502.14499",
+        "source_type": "paper"
+      },
+      {
+        "label": "Agent Laboratory: Using LLM Agents as Research Assistants (2025)",
+        "url": "https://arxiv.org/abs/2501.04227",
+        "source_type": "paper"
+      },
+      {
+        "label": "Autonomous AI Research Agents and the AI Scientist Position Paper (2025)",
+        "url": "https://arxiv.org/abs/2508.07617",
+        "source_type": "paper"
+      },
+      {
+        "label": "A Survey on Large Language Model based Autonomous Agents (2025)",
+        "url": "https://arxiv.org/abs/2503.16416",
+        "source_type": "paper"
+      }
+    ],
+    "related_pages": [
+      "software-engineering-agent-loop",
+      "agentic-evaluation-harness",
+      "agentic-frameworks-research-2023-2026",
+      "prompt-research-2022-2026"
+    ],
+    "section": "references",
+    "subsection": "references",
+    "body_html": "<h1 id=\"scientific-agent-research-2025-2026\">Scientific Agent Research 2025-2026</h1>\n<p>Scientific-agent research is transitioning from prototypes to benchmarked systems with reproducibility and governance constraints.</p>\n<h2 id=\"focus-areas\">Focus Areas</h2>\n<ol>\n<li>End-to-end research pipelines: hypothesis, experiment design, analysis, report drafting.</li>\n<li>Domain-specific tooling and environment interfaces.</li>\n<li>Evaluation of methodological validity, not only textual quality.</li>\n<li>Oversight and governance for high-impact scientific workflows.</li>\n</ol>\n<h2 id=\"implementation-implications\">Implementation Implications</h2>\n<ol>\n<li>Prompt contracts must encode evidentiary standards and uncertainty handling.</li>\n<li>Agent traces should preserve methodological decisions for review.</li>\n<li>Evaluation requires domain-expert rubrics and reproducibility checks.</li>\n</ol>\n<h2 id=\"practical-mapping-in-this-wiki\">Practical Mapping in This Wiki</h2>\n<p>Use these works to inform high-rigor agent deployments in coding, analytics, and research-heavy domains.</p>",
+    "toc": [
+      {
+        "id": "focus-areas",
+        "title": "Focus Areas",
+        "depth": 2
+      },
+      {
+        "id": "implementation-implications",
+        "title": "Implementation Implications",
+        "depth": 2
+      },
+      {
+        "id": "practical-mapping-in-this-wiki",
+        "title": "Practical Mapping in This Wiki",
+        "depth": 2
+      }
+    ],
+    "excerpt": "Scientific Agent Research 2025-2026 Scientific-agent research is transitioning from prototypes to benchmarked systems with reproducibility and governance constraints. Focus Areas End-to-end research pipelines: hypothesis",
+    "schema_version": 1,
+    "reading_time_minutes": 1
+  },
+  {
+    "title": "Agentic Evaluation Harness",
+    "slug": "agentic-evaluation-harness",
+    "content_type": "eval",
+    "summary": "Design an evaluation harness for agentic systems that combines task success, trace quality, and safety metrics.",
+    "tags": [
+      "eval",
+      "agents",
+      "benchmarks",
+      "quality"
+    ],
+    "task_type": [
+      "agentic",
+      "quality-assurance"
+    ],
+    "technique": [
+      "benchmark-alignment",
+      "trace-scoring",
+      "safety-scoring"
+    ],
+    "risk": [
+      "benchmark-overfitting",
+      "hidden-failure-modes"
+    ],
+    "provider_scope": "neutral",
+    "difficulty": "advanced",
+    "last_reviewed": "2026-02-28",
+    "references": [
+      {
+        "label": "HELM: Holistic Evaluation of Language Models (2022)",
+        "url": "https://arxiv.org/abs/2211.09110",
+        "source_type": "paper"
+      },
+      {
+        "label": "Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena (2023)",
+        "url": "https://arxiv.org/abs/2306.05685",
+        "source_type": "paper"
+      },
+      {
+        "label": "GAIA: A Benchmark for General AI Assistants (2023)",
+        "url": "https://arxiv.org/abs/2311.12983",
+        "source_type": "paper"
+      },
+      {
+        "label": "A Survey on Evaluation of LLM-based Agents (2025)",
+        "url": "https://arxiv.org/abs/2503.16416",
+        "source_type": "paper"
+      }
+    ],
+    "related_pages": [
+      "prompt-eval-suite-design",
+      "web-agent-task-execution",
+      "software-engineering-agent-loop",
+      "agent-benchmark-research-2023-2026"
+    ],
+    "section": "validate",
+    "subsection": "validate",
+    "body_html": "<h1 id=\"agentic-evaluation-harness\">Agentic Evaluation Harness</h1>\n<h2 id=\"what-is-measured\">What Is Measured</h2>\n<p>Agentic systems require more than final-answer scoring. Measure:</p>\n<ol>\n<li>Task success.</li>\n<li>Action trace correctness.</li>\n<li>Grounding and citation fidelity.</li>\n<li>Safety policy adherence.</li>\n</ol>\n<h2 id=\"dataset-design\">Dataset Design</h2>\n<p>Build a mixed suite:</p>\n<ol>\n<li>Deterministic tasks with known outputs.</li>\n<li>Open-ended tasks with rubric scoring.</li>\n<li>Adversarial tasks targeting tool misuse and injection.</li>\n</ol>\n<h2 id=\"scoring-rubric\">Scoring Rubric</h2>\n<p>Use weighted metrics:</p>\n<ol>\n<li>Outcome success: 35%.</li>\n<li>Trace quality and reproducibility: 25%.</li>\n<li>Grounding and evidence quality: 20%.</li>\n<li>Safety and policy compliance: 20%.</li>\n</ol>\n<h2 id=\"regression-procedure\">Regression Procedure</h2>\n<ol>\n<li>Freeze eval tasks per release cycle.</li>\n<li>Compare candidate agent and baseline on identical seeds.</li>\n<li>Log trace-level deltas, not only final pass rates.</li>\n<li>Block releases on severe safety regressions.</li>\n</ol>\n<h2 id=\"passfail-thresholds\">Pass/Fail Thresholds</h2>\n<ol>\n<li>No statistically meaningful drop in task success.</li>\n<li>Zero critical safety violations.</li>\n<li>Trace completeness above predefined threshold.</li>\n</ol>\n<p>Keep benchmark metrics and production telemetry together to avoid benchmark-only optimization.</p>",
+    "toc": [
+      {
+        "id": "what-is-measured",
+        "title": "What Is Measured",
+        "depth": 2
+      },
+      {
+        "id": "dataset-design",
+        "title": "Dataset Design",
+        "depth": 2
+      },
+      {
+        "id": "scoring-rubric",
+        "title": "Scoring Rubric",
+        "depth": 2
+      },
+      {
+        "id": "regression-procedure",
+        "title": "Regression Procedure",
+        "depth": 2
+      },
+      {
+        "id": "passfail-thresholds",
+        "title": "Pass/Fail Thresholds",
+        "depth": 2
+      }
+    ],
+    "excerpt": "Agentic Evaluation Harness What Is Measured Agentic systems require more than final-answer scoring. Measure: Task success. Action trace correctness. Grounding and citation fidelity. Safety policy adherence. Dataset Desig",
+    "schema_version": 1,
+    "reading_time_minutes": 1
+  },
+  {
+    "title": "Prompt Eval Suite Design",
+    "slug": "prompt-eval-suite-design",
+    "content_type": "eval",
+    "summary": "Design a lightweight but reliable evaluation suite that catches regressions before prompt changes ship.",
+    "tags": [
+      "eval",
+      "testing",
+      "regression"
+    ],
+    "task_type": [
+      "general",
+      "quality-assurance"
+    ],
+    "technique": [
+      "test-set-design",
+      "metric-thresholds"
+    ],
+    "risk": [
+      "false-confidence",
+      "untracked-regression"
+    ],
+    "provider_scope": "neutral",
+    "difficulty": "intermediate",
+    "last_reviewed": "2026-02-28",
+    "references": [
+      {
+        "label": "OpenAI Evals Guide",
+        "url": "https://platform.openai.com/docs/guides/evals",
+        "source_type": "doc"
+      },
+      {
+        "label": "Anthropic Define Success Criteria",
+        "url": "https://docs.anthropic.com/en/docs/test-and-evaluate/define-success",
+        "source_type": "doc"
+      },
+      {
+        "label": "HELM: Holistic Evaluation of Language Models (2022)",
+        "url": "https://arxiv.org/abs/2211.09110",
+        "source_type": "paper"
+      },
+      {
+        "label": "A Survey on Evaluation of LLM-based Agents (2025)",
+        "url": "https://arxiv.org/abs/2503.16416",
+        "source_type": "paper"
+      }
+    ],
+    "related_pages": [
+      "iteration-loop-with-evals",
+      "classification-with-rubric",
+      "support-triage-automation",
+      "agentic-evaluation-harness",
+      "agent-benchmark-research-2023-2026"
+    ],
+    "section": "validate",
+    "subsection": "validate",
+    "body_html": "<h1 id=\"prompt-eval-suite-design\">Prompt Eval Suite Design</h1>\n<h2 id=\"what-is-measured\">What Is Measured</h2>\n<p>Measure both structural reliability and task quality:</p>\n<ol>\n<li>Parse validity.</li>\n<li>Label correctness.</li>\n<li>Evidence faithfulness.</li>\n<li>Refusal or abstain behavior.</li>\n</ol>\n<h2 id=\"dataset-design\">Dataset Design</h2>\n<p>Split cases into:</p>\n<ol>\n<li>Core happy-path cases.</li>\n<li>Boundary ambiguity cases.</li>\n<li>Adversarial or noisy cases.</li>\n</ol>\n<p>Keep dataset immutable between prompt versions to preserve comparability.</p>\n<h2 id=\"scoring-rubric\">Scoring Rubric</h2>\n<p>Use a rubric with weighted metrics:</p>\n<ol>\n<li>Critical correctness: 50%.</li>\n<li>Format compliance: 20%.</li>\n<li>Evidence quality: 20%.</li>\n<li>Style and concision: 10%.</li>\n</ol>\n<h2 id=\"regression-procedure\">Regression Procedure</h2>\n<ol>\n<li>Run baseline prompt on full suite.</li>\n<li>Run candidate prompt on identical suite.</li>\n<li>Compare metric deltas and error clusters.</li>\n<li>Reject release if critical metric drops below threshold.</li>\n</ol>\n<h2 id=\"passfail-thresholds\">Pass/Fail Thresholds</h2>\n<ol>\n<li>No drop in critical correctness.</li>\n<li>Parse success &gt;= 99%.</li>\n<li>No increase in severe policy-related errors.</li>\n</ol>\n<p>Prompts should only advance if thresholds pass and newly introduced errors are explicitly reviewed.</p>",
+    "toc": [
+      {
+        "id": "what-is-measured",
+        "title": "What Is Measured",
+        "depth": 2
+      },
+      {
+        "id": "dataset-design",
+        "title": "Dataset Design",
+        "depth": 2
+      },
+      {
+        "id": "scoring-rubric",
+        "title": "Scoring Rubric",
+        "depth": 2
+      },
+      {
+        "id": "regression-procedure",
+        "title": "Regression Procedure",
+        "depth": 2
+      },
+      {
+        "id": "passfail-thresholds",
+        "title": "Pass/Fail Thresholds",
+        "depth": 2
+      }
+    ],
+    "excerpt": "Prompt Eval Suite Design What Is Measured Measure both structural reliability and task quality: Parse validity. Label correctness. Evidence faithfulness. Refusal or abstain behavior. Dataset Design Split cases into: Core",
+    "schema_version": 1,
+    "reading_time_minutes": 1
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "term": "Prompt Contract",
+    "definition": "A strict definition of objective, constraints, and output schema that every prompt invocation must satisfy."
+  },
+  {
+    "term": "Few-Shot Example",
+    "definition": "Representative input-output examples embedded in the prompt to teach pattern and style before live inference."
+  },
+  {
+    "term": "Rubric Scoring",
+    "definition": "A deterministic checklist used to score output quality across correctness, completeness, and format consistency."
+  },
+  {
+    "term": "Prompt Injection",
+    "definition": "Untrusted input that attempts to override system instructions or exfiltrate protected context."
+  },
+  {
+    "term": "Regression Set",
+    "definition": "A stable batch of test cases rerun after prompt changes to detect quality drift."
+  },
+  {
+    "term": "Grounded Response",
+    "definition": "An answer explicitly tied to supplied context or citations instead of model-only recall."
+  }
+]

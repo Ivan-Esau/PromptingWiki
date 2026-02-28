@@ -1,0 +1,432 @@
+[
+  {
+    "slug": "context-management-and-constraints",
+    "title": "Context Management and Constraints",
+    "summary": "Techniques for controlling context window usage and preventing instruction conflicts in long prompts.",
+    "content_type": "concept",
+    "section": "learn",
+    "subsection": "learn",
+    "tags": [
+      "context",
+      "constraints",
+      "long-inputs"
+    ],
+    "difficulty": "intermediate",
+    "text": "context management and constraints techniques for controlling context window usage and preventing instruction conflicts in long prompts. context constraints long-inputs context management and constraints prioritize context conflict resolution policy practical context packing why this matters context management and constraints the highest-quality prompt can still fail if context is poorly ordered or overstuffed. context strategy should be explicit and deterministic. prioritize context system and policy constraints first. task definition second. high-relevance evidence third. supplemental examples last. conflict resolution policy when context chunks conflict, force tie-breaking behavior: if two sources conflict, prefer the newest source. if confidence is below 0.7, abstain and request clarification. practical context packing keep one chunk one idea. label chunk origin and timestamp. drop low-value context before reducing constraint text. why this matters most production failures are not model capability issues; they are context hierarchy issues. clear precedence rules reduce hallucination and inconsistent style."
+  },
+  {
+    "slug": "few-shot-example-selection",
+    "title": "Few-Shot Example Selection",
+    "summary": "How to choose and format few-shot examples that teach behavior without overfitting style or format artifacts.",
+    "content_type": "concept",
+    "section": "learn",
+    "subsection": "learn",
+    "tags": [
+      "few-shot",
+      "examples",
+      "generalization"
+    ],
+    "difficulty": "intermediate",
+    "text": "few-shot example selection how to choose and format few-shot examples that teach behavior without overfitting style or format artifacts. few-shot examples generalization few-shot example selection selection heuristics example block pattern anti-pattern review rule few-shot example selection few-shot prompting should teach intent, not just mimic formatting. example sets must represent difficult cases, not only clean cases. selection heuristics include at least one borderline case. include at least one negative or abstain case. keep label distributions realistic. avoid repeating exact wording from likely live inputs. example block pattern example 1 input: ... output: ... example 2 input: ... output: ... anti-pattern using one perfect example creates brittle behavior. the model learns style tokens instead of decision boundaries. review rule rotate examples monthly or when domain language shifts. stale examples silently reduce production quality."
+  },
+  {
+    "slug": "iteration-loop-with-evals",
+    "title": "Iteration Loop with Evals",
+    "summary": "A repeatable cycle for changing prompts with measurable quality deltas and regression protection.",
+    "content_type": "concept",
+    "section": "learn",
+    "subsection": "learn",
+    "tags": [
+      "evals",
+      "iteration",
+      "quality-control"
+    ],
+    "difficulty": "intermediate",
+    "text": "iteration loop with evals a repeatable cycle for changing prompts with measurable quality deltas and regression protection. evals iteration quality-control iteration loop with evals loop minimum eval set decision rule operational note iteration loop with evals prompt quality improves when edits are treated like code changes: hypothesis, change, test, and rollback if needed. loop define target behavior with explicit pass criteria. run baseline prompt on a fixed test set. apply one focused prompt change. compare metrics and qualitative failure patterns. keep or reject change based on thresholds. minimum eval set 10 easy cases 10 boundary cases 10 adversarial or noisy cases decision rule never ship prompt edits based only on one or two examples. require stable gains across your regression set. operational note store prompt revisions and metrics in version control so incidents can be traced to exact prompt changes."
+  },
+  {
+    "slug": "output-schema-and-format-control",
+    "title": "Output Schema and Format Control",
+    "summary": "Designing strict output schemas and validation-friendly formats for reliable downstream automation.",
+    "content_type": "concept",
+    "section": "learn",
+    "subsection": "learn",
+    "tags": [
+      "schema",
+      "json",
+      "formatting",
+      "automation"
+    ],
+    "difficulty": "intro",
+    "text": "output schema and format control designing strict output schemas and validation-friendly formats for reliable downstream automation. schema json formatting automation output schema and format control schema-first prompting minimal contract example parsing guardrails pipeline benefit output schema and format control if output must feed software, formatting is a reliability requirement, not a cosmetic preference. schema-first prompting define types, required fields, and null behavior. state enum values explicitly. forbid extra keys. add a fallback error shape for invalid input. minimal contract example { \"label\": \"allow | block | review\", \"confidence\": 0.0, \"reasons\": [\"string\"] } parsing guardrails use deterministic keys. keep values machine-oriented. separate explanation from decision fields. pipeline benefit strict schema control lets teams run exact diff checks on outputs and detect behavior regressions early."
+  },
+  {
+    "slug": "prompt-structure-fundamentals",
+    "title": "Prompt Structure Fundamentals",
+    "summary": "How to design a stable prompt contract with objective, context, constraints, and output requirements.",
+    "content_type": "concept",
+    "section": "learn",
+    "subsection": "learn",
+    "tags": [
+      "fundamentals",
+      "prompt-contract",
+      "instruction-design"
+    ],
+    "difficulty": "intro",
+    "text": "prompt structure fundamentals how to design a stable prompt contract with objective, context, constraints, and output requirements. fundamentals prompt-contract instruction-design prompt structure fundamentals core prompt contract recommended layout common failure patterns practical rule prompt structure fundamentals reliable prompts behave like contracts rather than prose. a contract defines what the model should do, what context it may use, and what output is acceptable. core prompt contract objective: one explicit task sentence. context: bounded source material and assumptions. constraints: style, policy, and refusal boundaries. output requirements: schema, formatting, and confidence expression. recommended layout use stable section headers inside your prompt so edits do not collapse intent. objective: context: constraints: output format: quality checks: common failure patterns mixing instructions and examples without labels. hiding constraints deep in long context. asking for strict formatting without providing a schema. practical rule before running any eval, rewrite your prompt to make every instruction testable. if a reviewer cannot verify an instruction from output, the instruction is too vague."
+  },
+  {
+    "slug": "citation-grounded-rag-answering",
+    "title": "Citation-Grounded RAG Answering",
+    "summary": "Answer questions only from retrieved context, requiring evidence citations and explicit abstention when context is insufficient.",
+    "content_type": "pattern",
+    "section": "library",
+    "subsection": "patterns",
+    "tags": [
+      "pattern",
+      "rag",
+      "citations",
+      "grounding"
+    ],
+    "difficulty": "advanced",
+    "text": "citation-grounded rag answering answer questions only from retrieved context, requiring evidence citations and explicit abstention when context is insufficient. pattern rag citations grounding citation-grounded rag answering problem baseline prompt improved prompt why it works failure modes eval setup cost/latency notes references citation-grounded rag answering problem rag answers often cite incorrect passages or answer beyond retrieved evidence. baseline prompt answer the user question based on the provided context. improved prompt you may only answer using the retrieved context chunks. return json: { \"answer\": \"string\", \"citations\": [\"chunk_id_1\", \"chunk_id_2\"], \"confidence\": 0.00, \"abstain\": false, \"abstain_reason\": \"string | null\" } rules: - if context does not support an answer, set abstain=true. - each factual claim must map to a cited chunk id. - do not cite chunk ids that were not provided. why it works explicit citation and abstention fields force grounded behavior and enable automated citation checks. failure modes citations that do not contain the claimed fact. over-abstaining when weak but sufficient evidence exists. confidence not aligned with citation quality. eval setup measure exact citation validity, abstain precision/recall, and answer faithfulness across held-out questions. cost/latency notes citation validation adds post-processing but greatly improves trust in high-stakes responses. references combine this pattern with retrieval quality metrics. prompt quality cannot fix missing or irrelevant retrieval data."
+  },
+  {
+    "slug": "classification-with-rubric",
+    "title": "Classification with Rubric",
+    "summary": "Improve classification consistency by forcing rubric-based decisions with confidence and evidence fields.",
+    "content_type": "pattern",
+    "section": "library",
+    "subsection": "patterns",
+    "tags": [
+      "pattern",
+      "classification",
+      "rubric"
+    ],
+    "difficulty": "intermediate",
+    "text": "classification with rubric improve classification consistency by forcing rubric-based decisions with confidence and evidence fields. pattern classification rubric classification with rubric problem baseline prompt improved prompt why it works failure modes eval setup cost/latency notes references classification with rubric problem raw classification prompts often produce unstable labels and unhelpful confidence text. baseline prompt classify the message sentiment and urgency. improved prompt task: classify each message into one urgency label: low, medium, high. rubric: - high: blocked workflow, outage, legal/security risk, or repeated failed attempts. - medium: degraded experience but workaround exists. - low: informational or non-urgent request. return json: { \"urgency\": \"low | medium | high\", \"confidence\": 0.00, \"evidence\": [\"quoted phrase 1\", \"quoted phrase 2\"] } rules: - use only evidence present in input. - if evidence is weak, lower confidence. why it works rubrics turn abstract labels into explicit criteria and prevent hidden model heuristics from dominating. failure modes evidence quotes copied with wrong context. confidence inflation on ambiguous requests. class imbalance reducing minority-label recall. eval setup use a labeled dataset with class imbalance metrics: macro-f1, per-class recall, and confidence calibration error. cost/latency notes evidence and confidence fields add tokens but speed human audit and reduce escalation errors. references pair this pattern with periodic few-shot refresh to keep rubric interpretation aligned with policy changes."
+  },
+  {
+    "slug": "document-to-action-items",
+    "title": "Document to Action Items",
+    "summary": "Turn long meeting notes and project documents into structured action items with owners, deadlines, and uncertainty flags.",
+    "content_type": "use_case",
+    "section": "library",
+    "subsection": "use-cases",
+    "tags": [
+      "use-case",
+      "summarization",
+      "action-items"
+    ],
+    "difficulty": "intermediate",
+    "text": "document to action items turn long meeting notes and project documents into structured action items with owners, deadlines, and uncertainty flags. use-case summarization action-items document to action items scenario and constraints prompt assembly test set expected output rubric observed failures and fixes deployment notes references document to action items scenario and constraints weekly project notes include decisions, risks, and unresolved tasks. the team needs structured actions without introducing fictional owners or deadlines. prompt assembly stage 1: section summaries with decision/risk labels. stage 2: action extraction in strict json. stage 3: validation pass for missing owner or due date. { \"action\": \"string\", \"owner\": \"string | null\", \"due_date\": \"yyyy-mm-dd | null\", \"source_quote\": \"string\", \"confidence\": 0.0 } test set build a 30-document set with manually curated action lists. include cases where actions are implied, not explicit. expected output rubric action recall >= 88%. hallucinated action rate <= 3%. owner and due-date null handling correct >= 95%. observed failures and fixes inferred deadlines where none existed. fix: add explicit null requirement. over-merged action items. fix: one actionable verb per record. deployment notes show generated actions for human confirmation before syncing to ticketing systems. references pair this workflow with periodic manual audits to prevent drift in ownership extraction quality."
+  },
+  {
+    "slug": "long-context-summarization",
+    "title": "Long-Context Summarization",
+    "summary": "Summarize long documents using staged constraints and section-level evidence tracking to avoid omission bias.",
+    "content_type": "pattern",
+    "section": "library",
+    "subsection": "patterns",
+    "tags": [
+      "pattern",
+      "summarization",
+      "long-context"
+    ],
+    "difficulty": "advanced",
+    "text": "long-context summarization summarize long documents using staged constraints and section-level evidence tracking to avoid omission bias. pattern summarization long-context long-context summarization problem baseline prompt improved prompt why it works failure modes eval setup cost/latency notes references long-context summarization problem single-pass summarization on large inputs can miss low-frequency but high-impact details. baseline prompt summarize the following report in bullet points. improved prompt step 1: summarize each section separately with evidence quotes. step 2: merge section summaries into a final summary with these headings: - key outcomes - risks and blockers - open decisions output rules: - 5 to 8 bullets total. - include at least one explicit risk item. - include source section labels for each bullet. why it works hierarchical summarization maintains coverage and exposes where each statement comes from. failure modes duplicate bullets after synthesis. over-compression hiding uncertainty. incorrect section references. eval setup create gold summaries for 20 long documents. measure fact recall, unsupported claims, and key-risk coverage. cost/latency notes multi-stage prompts increase latency. use smaller chunk windows and parallel section summarization where possible. references treat evidence labeling as mandatory whenever summaries drive downstream decisions."
+  },
+  {
+    "slug": "policy-compliance-checking",
+    "title": "Policy Compliance Checking",
+    "summary": "Evaluate generated or human-authored text against policy controls with citations, risk levels, and escalation triggers.",
+    "content_type": "use_case",
+    "section": "library",
+    "subsection": "use-cases",
+    "tags": [
+      "use-case",
+      "compliance",
+      "policy"
+    ],
+    "difficulty": "advanced",
+    "text": "policy compliance checking evaluate generated or human-authored text against policy controls with citations, risk levels, and escalation triggers. use-case compliance policy policy compliance checking scenario and constraints prompt assembly test set expected output rubric observed failures and fixes deployment notes references policy compliance checking scenario and constraints a moderation team reviews ai-generated outbound content against internal policy. the checker must provide evidence and avoid confident guesses when policy text is missing. prompt assembly input: - content_to_check - policy_chunks (id + text) output: - decision: allow | review | block - violated_rules: policy ids - rationale: short text - confidence: 0.00 - abstain: true/false use `citation-grounded-rag-answering` for evidence mapping and `classification-with-rubric` for severity labels. test set create 75 policy-check examples with balanced allow/review/block outcomes and at least 15 low-evidence cases. expected output rubric policy citation precision >= 95%. false allow rate <= 2%. abstain behavior triggered correctly when policy context is insufficient. observed failures and fixes blocking on soft language cues. fix: severity rubric tied to explicit rule ids. missing citations in long responses. fix: enforce max rationale length and required citation array. deployment notes route `block` and `low-confidence review` decisions to human approval until the regression suite remains stable for multiple releases. references treat policy prompts as controlled artifacts with ownership and change approval, similar to production rulesets."
+  },
+  {
+    "slug": "self-refine-reflexion-loop",
+    "title": "Self-Refine and Reflexion Prompt Loop",
+    "summary": "An iterative prompting pattern where the model critiques its output and revises it against explicit quality rubrics.",
+    "content_type": "pattern",
+    "section": "library",
+    "subsection": "patterns",
+    "tags": [
+      "pattern",
+      "self-improvement",
+      "iteration"
+    ],
+    "difficulty": "advanced",
+    "text": "self-refine and reflexion prompt loop an iterative prompting pattern where the model critiques its output and revises it against explicit quality rubrics. pattern self-improvement iteration self-refine and reflexion prompt loop problem baseline prompt improved prompt why it works failure modes eval setup cost/latency notes references self-refine and reflexion prompt loop problem one-pass prompting leaves quality gains unrealized, especially on nuanced reasoning or structured writing tasks. baseline prompt produce the final answer directly. improved prompt stage a - draft: generate an initial answer. stage b - critique: evaluate the draft against this rubric: - correctness - completeness - policy compliance - schema validity stage c - revision: revise the answer using critique findings. return json: { \"draft\": \"string\", \"critique\": [\"string\"], \"final\": \"string\", \"confidence\": 0.0 } why it works structured self-critique shifts the model from generation-only mode to detect-and-correct mode before final output. failure modes critique copies draft language without real error detection. revisions increase length but not correctness. iteration loops overfit style while content errors remain. eval setup measure pre/post revision deltas on fixed tasks with human-verified answers. track improvements in factual correctness and schema conformance. cost/latency notes each iteration adds cost. cap at 1 to 2 refinement rounds unless measurable gains justify more. references treat self-refine loops as a controlled optimization step with clear stop criteria and measurable gains."
+  },
+  {
+    "slug": "software-engineering-agent-loop",
+    "title": "Software Engineering Agent Loop",
+    "summary": "A code-agent workflow for issue resolution with test-driven prompting, patch verification, and rollback safety gates.",
+    "content_type": "use_case",
+    "section": "library",
+    "subsection": "use-cases",
+    "tags": [
+      "use-case",
+      "software-engineering",
+      "agents"
+    ],
+    "difficulty": "advanced",
+    "text": "software engineering agent loop a code-agent workflow for issue resolution with test-driven prompting, patch verification, and rollback safety gates. use-case software-engineering agents software engineering agent loop scenario and constraints prompt assembly test set expected output rubric observed failures and fixes deployment notes references software engineering agent loop scenario and constraints a coding agent must resolve incoming bug issues with minimal regressions and transparent change rationale. prompt assembly workflow: 1) reproduce issue from ticket and tests. 2) propose patch plan with risk estimate. 3) apply minimal code change. 4) run targeted and full test suites. 5) if tests fail, enter one repair loop and explain root cause. output: - patch summary - changed files - tests executed - residual risk test set use a held-out issue set with: - small bug fixes - api compatibility fixes - flaky or incomplete test scenarios expected output rubric issue resolution accuracy (benchmark-defined). regression rate in unaffected tests. patch minimality and explainability. observed failures and fixes overly broad refactors. fix: prompt-level file-scope constraints. passing local tests but failing integration. fix: mandatory expanded verification phase. deployment notes use shadow-mode patch proposals first, then gated auto-apply only for low-risk classes. references combine benchmark-style evaluation with repository-specific guardrails; public benchmarks alone are insufficient."
+  },
+  {
+    "slug": "structured-json-extraction",
+    "title": "Structured JSON Extraction",
+    "summary": "Extract structured entities from unstructured text using strict schema constraints and deterministic fallback behavior.",
+    "content_type": "pattern",
+    "section": "library",
+    "subsection": "patterns",
+    "tags": [
+      "pattern",
+      "json",
+      "extraction"
+    ],
+    "difficulty": "intermediate",
+    "text": "structured json extraction extract structured entities from unstructured text using strict schema constraints and deterministic fallback behavior. pattern json extraction structured json extraction problem baseline prompt improved prompt why it works failure modes eval setup cost/latency notes references structured json extraction problem free-form outputs break automation. teams need deterministic fields from messy input text. baseline prompt extract the important details from this message and return json. improved prompt objective: extract support ticket fields from the input. input: {{ticket_text}} output format (strict json only): { \"customer_id\": \"string | null\", \"issue_type\": \"billing | access | performance | other\", \"priority\": \"low | medium | high\", \"summary\": \"string\", \"needs_human_followup\": true } rules: - return valid json only. - do not add extra keys. - if value is missing, return null and explain why in summary. why it works schema-enforced prompts reduce structural variance and make parsing failures observable. failure modes enum values outside allowed set. long summaries that hide uncertainty. null overuse when clues exist in input. eval setup create 40 tickets with known labels. check parse rate, enum validity, and label accuracy. cost/latency notes strict outputs may increase token count, but they lower downstream exception handling and retries. references use schema-native api features where possible, then keep prompt-level schema text as defense-in-depth."
+  },
+  {
+    "slug": "support-triage-automation",
+    "title": "Support Triage Automation",
+    "summary": "A production-oriented support triage workflow combining extraction, rubric classification, and escalation policies.",
+    "content_type": "use_case",
+    "section": "library",
+    "subsection": "use-cases",
+    "tags": [
+      "use-case",
+      "support",
+      "triage"
+    ],
+    "difficulty": "intermediate",
+    "text": "support triage automation a production-oriented support triage workflow combining extraction, rubric classification, and escalation policies. use-case support triage support triage automation scenario and constraints prompt assembly test set expected output rubric observed failures and fixes deployment notes references support triage automation scenario and constraints a support inbox receives mixed billing, outage, and account-access requests. the team needs deterministic queue routing with low false-high-priority rates. prompt assembly extract key fields with `structured-json-extraction`. assign urgency with `classification-with-rubric`. run final quality gate with `task-decomposition-for-workflows`. input: raw ticket text + account metadata. output: json with issue_type, urgency, routing_queue, escalation_reason. hard rule: high urgency requires quoted evidence. test set 120 tickets: - 40 billing - 40 access - 40 product/performance include 25 ambiguous cases and 20 intentionally noisy tickets. expected output rubric routing queue accuracy >= 92%. high-priority precision >= 90%. json parse success = 100%. observed failures and fixes false high-priority on emotional language. fix: require policy trigger phrases. missing account context. fix: add metadata section with explicit null behavior. deployment notes ship behind shadow mode first. compare automation output against human triage for one full week before active routing. references keep escalation policy versioned with prompt revisions. policy drift causes silent quality decay."
+  },
+  {
+    "slug": "task-decomposition-for-workflows",
+    "title": "Task Decomposition for Workflows",
+    "summary": "Break multi-step business tasks into explicit subtasks with intermediate checks before final output generation.",
+    "content_type": "pattern",
+    "section": "library",
+    "subsection": "patterns",
+    "tags": [
+      "pattern",
+      "decomposition",
+      "workflow"
+    ],
+    "difficulty": "advanced",
+    "text": "task decomposition for workflows break multi-step business tasks into explicit subtasks with intermediate checks before final output generation. pattern decomposition workflow task decomposition for workflows problem baseline prompt improved prompt why it works failure modes eval setup cost/latency notes references task decomposition for workflows problem single-prompt workflows can hide reasoning errors and make debugging impossible. baseline prompt read the request and generate the final action plan. improved prompt perform this in stages and show each stage output: 1) intent extraction 2) constraint detection 3) action plan generation 4) quality check against constraints return json: { \"intent\": \"string\", \"constraints\": [\"string\"], \"action_plan\": [\"string\"], \"quality_check\": { \"passes_constraints\": true, \"issues\": [\"string\"] } } why it works decomposition makes failures local and testable. each stage can be evaluated separately. failure modes intermediate stages becoming too verbose. quality check rubber-stamping invalid plans. downstream systems ignoring stage-level flags. eval setup score stage-level accuracy first, then final plan usefulness. regression-test each stage independently. cost/latency notes stage outputs increase tokens but reduce incident triage time by exposing where errors entered. references use decomposition only when workflow complexity justifies extra latency and review overhead."
+  },
+  {
+    "slug": "tool-use-planning-react-tot",
+    "title": "Tool-Use Planning with ReAct and Tree-of-Thought",
+    "summary": "A planning prompt pattern for multi-step tasks that combines ReAct tool calls with deliberate branching and verification.",
+    "content_type": "pattern",
+    "section": "library",
+    "subsection": "patterns",
+    "tags": [
+      "pattern",
+      "agentic",
+      "planning",
+      "tool-use"
+    ],
+    "difficulty": "advanced",
+    "text": "tool-use planning with react and tree-of-thought a planning prompt pattern for multi-step tasks that combines react tool calls with deliberate branching and verification. pattern agentic planning tool-use tool-use planning with react and tree-of-thought problem baseline prompt improved prompt why it works failure modes eval setup cost/latency notes references tool-use planning with react and tree-of-thought problem agentic prompts often fail because they choose the first plausible tool action without explicit plan verification. baseline prompt use available tools to solve the user task and return the final answer. improved prompt you are an agent with tools. step 1: build a 3-step candidate plan. step 2: generate 2 alternative plans for difficult steps. step 3: choose one plan using evidence quality and tool cost. step 4: execute react loop: - thought: what to do next - action: tool_name(arguments) - observation: tool result step 5: before final answer, run a verification pass: - are claims grounded in observations? - are citations or tool outputs sufficient? return json: { \"plan\": [\"...\"], \"actions\": [{\"tool\": \"string\", \"purpose\": \"string\"}], \"answer\": \"string\", \"verification\": {\"grounded\": true, \"issues\": [\"string\"]} } why it works this pattern separates planning from execution and introduces explicit branch exploration before committing to a tool path. failure modes over-planning causes unnecessary latency. tool observations are ignored when model priors are strong. verification becomes superficial if no hard checks are included. eval setup evaluate on tasks requiring at least two tools and one external knowledge lookup. score success, groundedness, and tool efficiency. cost/latency notes branching and verification increase token and tool usage. constrain branch count and require early-stop conditions. references use this pattern for high-stakes tasks where tool traces and reproducibility matter more than minimal latency."
+  },
+  {
+    "slug": "web-agent-task-execution",
+    "title": "Web Agent Task Execution",
+    "summary": "A web-navigation agent workflow for enterprise tasks with explicit planning, action constraints, and replayable traces.",
+    "content_type": "use_case",
+    "section": "library",
+    "subsection": "use-cases",
+    "tags": [
+      "use-case",
+      "agents",
+      "web-automation"
+    ],
+    "difficulty": "advanced",
+    "text": "web agent task execution a web-navigation agent workflow for enterprise tasks with explicit planning, action constraints, and replayable traces. use-case agents web-automation web agent task execution scenario and constraints prompt assembly test set expected output rubric observed failures and fixes deployment notes references web agent task execution scenario and constraints an operations team needs an agent to complete browser tasks such as account updates and report downloads. the workflow must be auditable and permission-scoped. prompt assembly system constraints: - allowed tools: browser_navigate, browser_click, browser_type, browser_read - forbidden actions: payment submission, account deletion, role changes agent policy: 1) plan steps before acting. 2) execute one action at a time. 3) capture observation after each action. 4) stop and request review on high-risk pages. test set 40 browser tasks: - 20 straightforward - 10 ambiguous navigation - 10 adversarial ui changes expected output rubric task completion rate >= 80%. safety policy violations = 0. full step trace logged for every attempt. observed failures and fixes action loops on dynamic pages. fix: add max-repeat guard. unsafe form submissions. fix: hard denylist plus human confirmation checkpoints. deployment notes start with read-only tasks in production and introduce write actions only after stable safety metrics. references benchmark web agents in environments with dynamic ui and adversarial noise, not only static demos."
+  },
+  {
+    "slug": "agent-memory-privacy-controls",
+    "title": "Agent Memory and Privacy Controls",
+    "summary": "Safety controls for memory-enabled agents, including instruction hierarchy, data minimization, and privacy-preserving traces.",
+    "content_type": "safety",
+    "section": "operate",
+    "subsection": "operate",
+    "tags": [
+      "safety",
+      "agents",
+      "memory",
+      "privacy"
+    ],
+    "difficulty": "advanced",
+    "text": "agent memory and privacy controls safety controls for memory-enabled agents, including instruction hierarchy, data minimization, and privacy-preserving traces. safety agents memory privacy agent memory and privacy controls threat model controls failure handling references agent memory and privacy controls threat model memory-enabled agents introduce additional attack surfaces: prompt injection into long-term memory. sensitive data retention beyond intended scope. retrieval of stale or policy-invalid memory entries. controls scope memory by task, tenant, and retention window. store instruction provenance with each memory item. apply redaction and secret detection before persistence. enforce instruction hierarchy so untrusted memory cannot override system policy. failure handling when memory safety checks fail: drop or quarantine suspicious memory entries. return safe fallback output without privileged actions. trigger audit event with trace hash and policy reason. require human review before memory is reinstated. references treat agent memory as regulated data storage with explicit lifecycle, provenance, and deletion guarantees."
+  },
+  {
+    "slug": "prompt-injection-safety-checklist",
+    "title": "Prompt Injection Safety Checklist",
+    "summary": "Operational checklist for defending prompt pipelines against instruction override, context leakage, and unsafe tool actions.",
+    "content_type": "safety",
+    "section": "operate",
+    "subsection": "operate",
+    "tags": [
+      "safety",
+      "prompt-injection",
+      "operations"
+    ],
+    "difficulty": "advanced",
+    "text": "prompt injection safety checklist operational checklist for defending prompt pipelines against instruction override, context leakage, and unsafe tool actions. safety prompt-injection operations prompt injection safety checklist threat model controls failure handling references prompt injection safety checklist threat model identify where untrusted instructions can enter: user input fields. retrieved documents. tool output from external systems. browser or web-scraped content. controls keep trusted instructions in system-level prompt and never concatenate blindly with user text. label untrusted text boundaries explicitly. restrict tool permissions with allowlists and parameter validation. enforce response schema so unsafe outputs can be caught automatically. failure handling if injection is detected or suspected: return a safe abstain response. log triggering input and model output for incident review. disable risky tools for the session. re-run with high-safety prompt profile. references treat prompt injection as an application security concern, not only a prompting concern. controls should be layered across prompt, retrieval, and tool execution."
+  },
+  {
+    "slug": "agent-benchmark-research-2023-2026",
+    "title": "Agent Benchmark Research 2023-2026",
+    "summary": "Primary benchmarks used to evaluate agentic systems on web tasks, software engineering, and open-ended assistant behavior.",
+    "content_type": "reference",
+    "section": "references",
+    "subsection": "references",
+    "tags": [
+      "references",
+      "benchmarks",
+      "agents",
+      "evaluation"
+    ],
+    "difficulty": "advanced",
+    "text": "agent benchmark research 2023-2026 primary benchmarks used to evaluate agentic systems on web tasks, software engineering, and open-ended assistant behavior. references benchmarks agents evaluation agent benchmark research 2023-2026 benchmark families evaluation lessons practical mapping in this wiki agent benchmark research 2023-2026 benchmark coverage is essential because agent quality depends on environment interaction, not only final text outputs. benchmark families web interaction benchmarks: webarena and mind2web. software engineering benchmarks: swe-bench and swe-agent setups. broad assistant tasks: agentbench and gaia. research-agent workflows: mlgym. evaluation lessons final success rate alone hides critical safety and trace-quality failures. benchmarks vary in realism, observability, and action-space difficulty. production evaluation should blend benchmark tasks with internal domain tasks. practical mapping in this wiki use this collection to design: agentic eval harness thresholds. release gates for automation risk. trace-level regression dashboards."
+  },
+  {
+    "slug": "agentic-frameworks-research-2023-2026",
+    "title": "Agentic Frameworks Research 2023-2026",
+    "summary": "Key research papers behind modern single-agent and multi-agent framework design, orchestration, and optimization.",
+    "content_type": "reference",
+    "section": "references",
+    "subsection": "references",
+    "tags": [
+      "references",
+      "agents",
+      "frameworks",
+      "agentic-ai"
+    ],
+    "difficulty": "advanced",
+    "text": "agentic frameworks research 2023-2026 key research papers behind modern single-agent and multi-agent framework design, orchestration, and optimization. references agents frameworks agentic-ai agentic frameworks research 2023-2026 single-agent to multi-agent progression key design dimensions 2025+ direction practical mapping in this wiki agentic frameworks research 2023-2026 this reference map covers the transition from prompt-only systems to orchestrated agent frameworks. single-agent to multi-agent progression camel and autogen introduced explicit agent-role communication as a first-class mechanism. metagpt extended this into software-style team workflows with specialized roles. voyager showed long-horizon skill accumulation in embodied settings. key design dimensions role decomposition and communication protocol. memory design and retrieval policy. tool interface and action safety constraints. feedback and optimization loop design. 2025+ direction recent work emphasizes training and optimization of agent behavior, not just handcrafted prompting. this shifts effort toward measurable policy learning loops. practical mapping in this wiki these papers inform: react and planning prompts. multi-step workflow orchestration patterns. agentic evaluation harness design."
+  },
+  {
+    "slug": "multi-agent-collaboration-risk-research-2025",
+    "title": "Multi-Agent Collaboration and Risk Research 2025",
+    "summary": "Recent 2025 research on multi-agent collaboration, architecture choices, and risk analysis for production deployments.",
+    "content_type": "reference",
+    "section": "references",
+    "subsection": "references",
+    "tags": [
+      "references",
+      "multi-agent",
+      "risk",
+      "architecture"
+    ],
+    "difficulty": "advanced",
+    "text": "multi-agent collaboration and risk research 2025 recent 2025 research on multi-agent collaboration, architecture choices, and risk analysis for production deployments. references multi-agent risk architecture multi-agent collaboration and risk research 2025 main research themes practical takeaways practical mapping in this wiki multi-agent collaboration and risk research 2025 recent work moved beyond agent capability into coordination quality and systemic risk. main research themes taxonomies for role allocation and communication patterns. coordination pathologies such as role collapse and feedback loops. safety and alignment concerns unique to interacting agent teams. governance and observability requirements for production orchestration. practical takeaways multi-agent setups should justify themselves with measurable task decomposition gains. shared memory and message buses need strict policy boundaries. evaluation must capture team-level behaviors, not only final output quality. practical mapping in this wiki use this reference set when designing: multi-step orchestration prompts. agent memory and privacy controls. team-level safety and eval requirements."
+  },
+  {
+    "slug": "prompt-research-2022-2026",
+    "title": "Prompt Research 2022-2026",
+    "summary": "Curated scientific backbone for modern prompting methods from chain-of-thought to prompt optimization frameworks.",
+    "content_type": "reference",
+    "section": "references",
+    "subsection": "references",
+    "tags": [
+      "references",
+      "prompting",
+      "research"
+    ],
+    "difficulty": "intermediate",
+    "text": "prompt research 2022-2026 curated scientific backbone for modern prompting methods from chain-of-thought to prompt optimization frameworks. references prompting research prompt research 2022-2026 foundational reasoning methods planning and acting extensions prompt optimization and compilation practical mapping in this wiki prompt research 2022-2026 this page tracks the core scientific progression of prompting methods and how they map to practical production patterns. foundational reasoning methods chain-of-thought established explicit intermediate reasoning as a useful prompting scaffold. self-consistency improved reliability by sampling and selecting across multiple reasoning paths. least-to-most prompting formalized decomposition from simpler subproblems to harder targets. planning and acting extensions react introduced structured thought-action-observation loops for tool use. tree of thoughts introduced deliberate branch exploration before final commitment. these ideas directly support modern agentic prompting and workflow decomposition. prompt optimization and compilation opro showed that prompts can be optimized as objective-driven artifacts. dspy reframed prompt engineering as a compilable pipeline with measurable improvements. survey work in 2024 to 2025 consolidated best practices and failure patterns for practitioners. practical mapping in this wiki use these papers to inform: prompt contract design. iterative refinement loops. planning prompts for tool-augmented agents."
+  },
+  {
+    "slug": "rag-research-landscape-2020-2026",
+    "title": "RAG Research Landscape 2020-2026",
+    "summary": "Scientific references for retrieval-augmented generation, including grounding, corrective retrieval, and graph-based retrieval.",
+    "content_type": "reference",
+    "section": "references",
+    "subsection": "references",
+    "tags": [
+      "references",
+      "rag",
+      "grounding",
+      "retrieval"
+    ],
+    "difficulty": "advanced",
+    "text": "rag research landscape 2020-2026 scientific references for retrieval-augmented generation, including grounding, corrective retrieval, and graph-based retrieval. references rag grounding retrieval rag research landscape 2020-2026 core progression implementation implications practical mapping in this wiki rag research landscape 2020-2026 rag methods evolved from simple retrieval-then-generation pipelines to reflective and graph-structured retrieval systems. core progression original rag established external knowledge grounding for generation. self-rag added self-reflection about retrieval sufficiency. crag introduced corrective retrieval mechanisms when evidence is weak. graphrag approaches improved global-context synthesis over connected evidence. implementation implications prompt design must include retrieval confidence and abstention behavior. evaluation must separately score retrieval quality and answer faithfulness. citation quality is a first-class metric, not optional metadata. practical mapping in this wiki these works directly support: citation-grounded answering patterns. policy compliance workflows requiring explicit evidence. safety controls for untrusted retrieval contexts."
+  },
+  {
+    "slug": "safety-and-jailbreak-research-2023-2026",
+    "title": "Safety and Jailbreak Research 2023-2026",
+    "summary": "Research references on prompt injection, jailbreak strategies, instruction hierarchy, and privacy risks in LLM systems.",
+    "content_type": "reference",
+    "section": "references",
+    "subsection": "references",
+    "tags": [
+      "references",
+      "safety",
+      "jailbreak",
+      "security"
+    ],
+    "difficulty": "advanced",
+    "text": "safety and jailbreak research 2023-2026 research references on prompt injection, jailbreak strategies, instruction hierarchy, and privacy risks in llm systems. references safety jailbreak security safety and jailbreak research 2023-2026 attack families defense directions practical mapping in this wiki safety and jailbreak research 2023-2026 this reference set anchors defensive prompting and agent guardrails in empirical attack and mitigation research. attack families prompt injection through untrusted context and tool outputs. jailbreak optimization attacks against alignment policies. query-efficient black-box attack strategies. long-context abuse patterns such as many-shot jailbreaks. defense directions instruction hierarchy and privilege separation. structured output contracts with policy checks. continuous adversarial evaluation with release gates. memory and data lifecycle controls for privacy. practical mapping in this wiki apply these works to: prompt injection checklists. agent memory and privacy controls. safety metrics in agentic eval harnesses."
+  },
+  {
+    "slug": "scientific-agent-research-2025-2026",
+    "title": "Scientific Agent Research 2025-2026",
+    "summary": "Emerging research on autonomous scientific and research agents, including benchmarks, laboratories, and governance concerns.",
+    "content_type": "reference",
+    "section": "references",
+    "subsection": "references",
+    "tags": [
+      "references",
+      "scientific-agents",
+      "research-agents"
+    ],
+    "difficulty": "advanced",
+    "text": "scientific agent research 2025-2026 emerging research on autonomous scientific and research agents, including benchmarks, laboratories, and governance concerns. references scientific-agents research-agents scientific agent research 2025-2026 focus areas implementation implications practical mapping in this wiki scientific agent research 2025-2026 scientific-agent research is transitioning from prototypes to benchmarked systems with reproducibility and governance constraints. focus areas end-to-end research pipelines: hypothesis, experiment design, analysis, report drafting. domain-specific tooling and environment interfaces. evaluation of methodological validity, not only textual quality. oversight and governance for high-impact scientific workflows. implementation implications prompt contracts must encode evidentiary standards and uncertainty handling. agent traces should preserve methodological decisions for review. evaluation requires domain-expert rubrics and reproducibility checks. practical mapping in this wiki use these works to inform high-rigor agent deployments in coding, analytics, and research-heavy domains."
+  },
+  {
+    "slug": "agentic-evaluation-harness",
+    "title": "Agentic Evaluation Harness",
+    "summary": "Design an evaluation harness for agentic systems that combines task success, trace quality, and safety metrics.",
+    "content_type": "eval",
+    "section": "validate",
+    "subsection": "validate",
+    "tags": [
+      "eval",
+      "agents",
+      "benchmarks",
+      "quality"
+    ],
+    "difficulty": "advanced",
+    "text": "agentic evaluation harness design an evaluation harness for agentic systems that combines task success, trace quality, and safety metrics. eval agents benchmarks quality agentic evaluation harness what is measured dataset design scoring rubric regression procedure pass/fail thresholds agentic evaluation harness what is measured agentic systems require more than final-answer scoring. measure: task success. action trace correctness. grounding and citation fidelity. safety policy adherence. dataset design build a mixed suite: deterministic tasks with known outputs. open-ended tasks with rubric scoring. adversarial tasks targeting tool misuse and injection. scoring rubric use weighted metrics: outcome success: 35%. trace quality and reproducibility: 25%. grounding and evidence quality: 20%. safety and policy compliance: 20%. regression procedure freeze eval tasks per release cycle. compare candidate agent and baseline on identical seeds. log trace-level deltas, not only final pass rates. block releases on severe safety regressions. pass/fail thresholds no statistically meaningful drop in task success. zero critical safety violations. trace completeness above predefined threshold. keep benchmark metrics and production telemetry together to avoid benchmark-only optimization."
+  },
+  {
+    "slug": "prompt-eval-suite-design",
+    "title": "Prompt Eval Suite Design",
+    "summary": "Design a lightweight but reliable evaluation suite that catches regressions before prompt changes ship.",
+    "content_type": "eval",
+    "section": "validate",
+    "subsection": "validate",
+    "tags": [
+      "eval",
+      "testing",
+      "regression"
+    ],
+    "difficulty": "intermediate",
+    "text": "prompt eval suite design design a lightweight but reliable evaluation suite that catches regressions before prompt changes ship. eval testing regression prompt eval suite design what is measured dataset design scoring rubric regression procedure pass/fail thresholds prompt eval suite design what is measured measure both structural reliability and task quality: parse validity. label correctness. evidence faithfulness. refusal or abstain behavior. dataset design split cases into: core happy-path cases. boundary ambiguity cases. adversarial or noisy cases. keep dataset immutable between prompt versions to preserve comparability. scoring rubric use a rubric with weighted metrics: critical correctness: 50%. format compliance: 20%. evidence quality: 20%. style and concision: 10%. regression procedure run baseline prompt on full suite. run candidate prompt on identical suite. compare metric deltas and error clusters. reject release if critical metric drops below threshold. pass/fail thresholds no drop in critical correctness. parse success >= 99%. no increase in severe policy-related errors. prompts should only advance if thresholds pass and newly introduced errors are explicitly reviewed."
+  }
+]

@@ -1,0 +1,32 @@
+[
+  {
+    "key": "learn",
+    "title": "Learn",
+    "description": "Core prompting concepts and progression."
+  },
+  {
+    "key": "library",
+    "title": "Library",
+    "description": "Reusable patterns and use-case recipes."
+  },
+  {
+    "key": "validate",
+    "title": "Validate",
+    "description": "Evaluation methods and regression loops."
+  },
+  {
+    "key": "operate",
+    "title": "Operate",
+    "description": "Safety, risk, and production guardrails."
+  },
+  {
+    "key": "references",
+    "title": "References",
+    "description": "Primary-source material behind every recommendation."
+  },
+  {
+    "key": "glossary",
+    "title": "Glossary",
+    "description": "Shared language for prompt engineering work."
+  }
+]
