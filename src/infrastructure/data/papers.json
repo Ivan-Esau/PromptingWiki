@@ -1,0 +1,522 @@
+[
+  {
+    "id": "vaswani-2017-attention",
+    "title": "Attention Is All You Need",
+    "year": 2017,
+    "venue": "NeurIPS",
+    "authors": [
+      "Ashish Vaswani",
+      "Noam Shazeer",
+      "Niki Parmar",
+      "Jakob Uszkoreit"
+    ],
+    "url": "https://arxiv.org/abs/1706.03762",
+    "doi": "10.48550/arXiv.1706.03762",
+    "topics": [
+      "foundations",
+      "transformers"
+    ],
+    "summary": "Introduced the transformer architecture and scaled self-attention as the core primitive for sequence modeling.",
+    "references": []
+  },
+  {
+    "id": "devlin-2018-bert",
+    "title": "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding",
+    "year": 2018,
+    "venue": "NAACL",
+    "authors": [
+      "Jacob Devlin",
+      "Ming-Wei Chang",
+      "Kenton Lee",
+      "Kristina Toutanova"
+    ],
+    "url": "https://arxiv.org/abs/1810.04805",
+    "doi": "10.48550/arXiv.1810.04805",
+    "topics": [
+      "foundations",
+      "transformers",
+      "pretraining"
+    ],
+    "summary": "Showed bidirectional pretraining objectives that made transfer learning practical for many NLP tasks.",
+    "references": [
+      "vaswani-2017-attention"
+    ]
+  },
+  {
+    "id": "brown-2020-gpt3",
+    "title": "Language Models are Few-Shot Learners",
+    "year": 2020,
+    "venue": "NeurIPS",
+    "authors": [
+      "Tom Brown",
+      "Benjamin Mann",
+      "Nick Ryder",
+      "Melanie Subbiah"
+    ],
+    "url": "https://arxiv.org/abs/2005.14165",
+    "doi": "10.48550/arXiv.2005.14165",
+    "topics": [
+      "pretraining",
+      "transformers",
+      "foundations",
+      "prompting"
+    ],
+    "summary": "Demonstrated large-scale in-context learning and established prompting as a core adaptation mechanism.",
+    "references": [
+      "vaswani-2017-attention"
+    ]
+  },
+  {
+    "id": "lewis-2020-rag",
+    "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+    "year": 2020,
+    "venue": "NeurIPS",
+    "authors": [
+      "Patrick Lewis",
+      "Ethan Perez",
+      "Aleksandra Piktus",
+      "Fabio Petroni"
+    ],
+    "url": "https://arxiv.org/abs/2005.11401",
+    "doi": "10.48550/arXiv.2005.11401",
+    "topics": [
+      "retrieval",
+      "pretraining",
+      "prompting"
+    ],
+    "summary": "Combined dense retrieval with sequence generation and seeded the modern RAG design space.",
+    "references": [
+      "devlin-2018-bert",
+      "brown-2020-gpt3"
+    ]
+  },
+  {
+    "id": "nakano-2021-webgpt",
+    "title": "WebGPT: Browser-assisted Question-answering with Human Feedback",
+    "year": 2021,
+    "venue": "arXiv",
+    "authors": [
+      "Reiichiro Nakano",
+      "Jacob Hilton",
+      "Suchir Balaji",
+      "Jeff Wu"
+    ],
+    "url": "https://arxiv.org/abs/2112.09332",
+    "doi": "10.48550/arXiv.2112.09332",
+    "topics": [
+      "retrieval",
+      "tool-use",
+      "alignment"
+    ],
+    "summary": "Connected web browsing behavior with reward modeling, influencing tool-using QA agents.",
+    "references": [
+      "brown-2020-gpt3"
+    ]
+  },
+  {
+    "id": "wei-2022-cot",
+    "title": "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models",
+    "year": 2022,
+    "venue": "NeurIPS",
+    "authors": [
+      "Jason Wei",
+      "Xuezhi Wang",
+      "Dale Schuurmans",
+      "Maarten Bosma"
+    ],
+    "url": "https://arxiv.org/abs/2201.11903",
+    "doi": "10.48550/arXiv.2201.11903",
+    "topics": [
+      "prompting",
+      "reasoning"
+    ],
+    "summary": "Established explicit reasoning traces as a high-impact prompt strategy for complex problem solving.",
+    "references": [
+      "brown-2020-gpt3"
+    ]
+  },
+  {
+    "id": "ouyang-2022-instructgpt",
+    "title": "Training Language Models to Follow Instructions with Human Feedback",
+    "year": 2022,
+    "venue": "NeurIPS",
+    "authors": [
+      "Long Ouyang",
+      "Jeff Wu",
+      "Xu Jiang",
+      "Diogo Almeida"
+    ],
+    "url": "https://arxiv.org/abs/2203.02155",
+    "doi": "10.48550/arXiv.2203.02155",
+    "topics": [
+      "instruction-tuning",
+      "alignment",
+      "safety"
+    ],
+    "summary": "Operationalized RLHF for instruction following and safety behaviors in general-purpose assistants.",
+    "references": [
+      "brown-2020-gpt3"
+    ]
+  },
+  {
+    "id": "wang-2022-self-consistency",
+    "title": "Self-Consistency Improves Chain of Thought Reasoning in Language Models",
+    "year": 2022,
+    "venue": "ICLR",
+    "authors": [
+      "Xuezhi Wang",
+      "Jason Wei",
+      "Dale Schuurmans",
+      "Quoc Le"
+    ],
+    "url": "https://arxiv.org/abs/2203.11171",
+    "doi": "10.48550/arXiv.2203.11171",
+    "topics": [
+      "prompting",
+      "reasoning",
+      "evaluation"
+    ],
+    "summary": "Improved reasoning reliability through diverse reasoning paths and consensus decoding.",
+    "references": [
+      "wei-2022-cot"
+    ]
+  },
+  {
+    "id": "bai-2022-constitutional-ai",
+    "title": "Constitutional AI: Harmlessness from AI Feedback",
+    "year": 2022,
+    "venue": "arXiv",
+    "authors": [
+      "Yuntao Bai",
+      "Andy Jones",
+      "Kamal Ndousse",
+      "Amanda Askell"
+    ],
+    "url": "https://arxiv.org/abs/2212.08073",
+    "doi": "10.48550/arXiv.2212.08073",
+    "topics": [
+      "alignment",
+      "safety",
+      "instruction-tuning"
+    ],
+    "summary": "Proposed rule-guided supervision pipelines for safer dialogue behaviors with less human labeling.",
+    "references": [
+      "ouyang-2022-instructgpt"
+    ]
+  },
+  {
+    "id": "yao-2023-react",
+    "title": "ReAct: Synergizing Reasoning and Acting in Language Models",
+    "year": 2023,
+    "venue": "ICLR",
+    "authors": [
+      "Shunyu Yao",
+      "Jeffrey Zhao",
+      "Dian Yu",
+      "Karthik Narasimhan"
+    ],
+    "url": "https://arxiv.org/abs/2210.03629",
+    "doi": "10.48550/arXiv.2210.03629",
+    "topics": [
+      "reasoning",
+      "prompting",
+      "tool-use",
+      "agents"
+    ],
+    "summary": "Unified thought and action traces into an execution loop that became a baseline for agent prompting.",
+    "references": [
+      "wei-2022-cot",
+      "wang-2022-self-consistency"
+    ]
+  },
+  {
+    "id": "schick-2023-toolformer",
+    "title": "Toolformer: Language Models Can Teach Themselves to Use Tools",
+    "year": 2023,
+    "venue": "NeurIPS",
+    "authors": [
+      "Timo Schick",
+      "Jane Dwivedi-Yu",
+      "Roberta Raileanu",
+      "Maria Lomeli"
+    ],
+    "url": "https://arxiv.org/abs/2302.04761",
+    "doi": "10.48550/arXiv.2302.04761",
+    "topics": [
+      "tool-use",
+      "agents",
+      "pretraining"
+    ],
+    "summary": "Showed self-supervised tool-use annotation and integration into language model training.",
+    "references": [
+      "brown-2020-gpt3"
+    ]
+  },
+  {
+    "id": "yao-2023-tree-of-thoughts",
+    "title": "Tree of Thoughts: Deliberate Problem Solving with Large Language Models",
+    "year": 2023,
+    "venue": "NeurIPS",
+    "authors": [
+      "Shunyu Yao",
+      "Dian Yu",
+      "Jeffrey Zhao",
+      "Izhak Shafran"
+    ],
+    "url": "https://arxiv.org/abs/2305.10601",
+    "doi": "10.48550/arXiv.2305.10601",
+    "topics": [
+      "reasoning",
+      "prompting",
+      "agents"
+    ],
+    "summary": "Framed reasoning as search over intermediate thoughts with branching and backtracking.",
+    "references": [
+      "wei-2022-cot",
+      "yao-2023-react"
+    ]
+  },
+  {
+    "id": "shinn-2023-reflexion",
+    "title": "Reflexion: Language Agents with Verbal Reinforcement Learning",
+    "year": 2023,
+    "venue": "NeurIPS",
+    "authors": [
+      "Noah Shinn",
+      "Federico Cassano",
+      "Ashwin Gopinath",
+      "Karthik Narasimhan"
+    ],
+    "url": "https://arxiv.org/abs/2303.11366",
+    "doi": "10.48550/arXiv.2303.11366",
+    "topics": [
+      "reasoning",
+      "agents",
+      "evaluation"
+    ],
+    "summary": "Added self-feedback memory loops that improve agent trajectories without additional model training.",
+    "references": [
+      "yao-2023-react",
+      "yao-2023-tree-of-thoughts"
+    ]
+  },
+  {
+    "id": "rafailov-2023-dpo",
+    "title": "Direct Preference Optimization: Your Language Model is Secretly a Reward Model",
+    "year": 2023,
+    "venue": "NeurIPS",
+    "authors": [
+      "Rafael Rafailov",
+      "Archit Sharma",
+      "Eric Mitchell",
+      "Chelsea Finn"
+    ],
+    "url": "https://arxiv.org/abs/2305.18290",
+    "doi": "10.48550/arXiv.2305.18290",
+    "topics": [
+      "alignment",
+      "instruction-tuning",
+      "safety"
+    ],
+    "summary": "Simplified preference alignment by directly optimizing pairwise preferences without explicit RL.",
+    "references": [
+      "ouyang-2022-instructgpt",
+      "bai-2022-constitutional-ai"
+    ]
+  },
+  {
+    "id": "touvron-2023-llama2",
+    "title": "Llama 2: Open Foundation and Fine-Tuned Chat Models",
+    "year": 2023,
+    "venue": "arXiv",
+    "authors": [
+      "Hugo Touvron",
+      "Louis Martin",
+      "Kevin Stone",
+      "Peter Albert"
+    ],
+    "url": "https://arxiv.org/abs/2307.09288",
+    "doi": "10.48550/arXiv.2307.09288",
+    "topics": [
+      "pretraining",
+      "alignment",
+      "safety"
+    ],
+    "summary": "Published an open foundation stack and chat tuning process with transparent safety considerations.",
+    "references": [
+      "brown-2020-gpt3",
+      "ouyang-2022-instructgpt"
+    ]
+  },
+  {
+    "id": "openai-2023-gpt4",
+    "title": "GPT-4 Technical Report",
+    "year": 2023,
+    "venue": "arXiv",
+    "authors": [
+      "OpenAI"
+    ],
+    "url": "https://arxiv.org/abs/2303.08774",
+    "doi": "10.48550/arXiv.2303.08774",
+    "topics": [
+      "pretraining",
+      "reasoning",
+      "multimodal",
+      "safety"
+    ],
+    "summary": "Documented large-scale multimodal model behavior, evaluation practices, and deployment constraints.",
+    "references": [
+      "brown-2020-gpt3",
+      "ouyang-2022-instructgpt",
+      "wei-2022-cot"
+    ]
+  },
+  {
+    "id": "liu-2023-autogen",
+    "title": "AutoGen: Enabling Next-Gen LLM Applications via Multi-Agent Conversation",
+    "year": 2023,
+    "venue": "ICLR",
+    "authors": [
+      "Qingyun Liu",
+      "Chi Wang",
+      "Yuan Wu",
+      "Siyuan Wang"
+    ],
+    "url": "https://arxiv.org/abs/2308.08155",
+    "doi": "10.48550/arXiv.2308.08155",
+    "topics": [
+      "agents",
+      "tool-use",
+      "evaluation"
+    ],
+    "summary": "Provided a practical framework for orchestrating multiple LLM roles with tool integrations.",
+    "references": [
+      "yao-2023-react",
+      "schick-2023-toolformer",
+      "openai-2023-gpt4"
+    ]
+  },
+  {
+    "id": "khattab-2023-dspy",
+    "title": "DSPy: Compiling Declarative Language Model Calls into Self-Improving Pipelines",
+    "year": 2023,
+    "venue": "arXiv",
+    "authors": [
+      "Omar Khattab",
+      "Keshav Santhanam",
+      "Xiang Lisa Li",
+      "Christopher Potts"
+    ],
+    "url": "https://arxiv.org/abs/2310.03714",
+    "doi": "10.48550/arXiv.2310.03714",
+    "topics": [
+      "prompting",
+      "evaluation",
+      "tool-use",
+      "reasoning"
+    ],
+    "summary": "Shifted prompt engineering toward compiler-like optimization of LM programs and metrics.",
+    "references": [
+      "wei-2022-cot",
+      "yao-2023-react"
+    ]
+  },
+  {
+    "id": "deng-2023-webarena",
+    "title": "WebArena: A Realistic Web Environment for Building Autonomous Agents",
+    "year": 2023,
+    "venue": "NeurIPS",
+    "authors": [
+      "Xiwen Deng",
+      "Yu Gu",
+      "Boyuan Zheng",
+      "Mingyu Yang"
+    ],
+    "url": "https://arxiv.org/abs/2307.13854",
+    "doi": "10.48550/arXiv.2307.13854",
+    "topics": [
+      "agents",
+      "tool-use",
+      "evaluation"
+    ],
+    "summary": "Defined a reproducible web task benchmark to evaluate long-horizon, tool-using agents.",
+    "references": [
+      "openai-2023-gpt4",
+      "yao-2023-react"
+    ]
+  },
+  {
+    "id": "jimenez-2023-swebench",
+    "title": "SWE-bench: Can Language Models Resolve Real-World GitHub Issues?",
+    "year": 2023,
+    "venue": "ICLR",
+    "authors": [
+      "Carlos E. Jimenez",
+      "John Yang",
+      "Alexander Wettig",
+      "Shunyu Yao"
+    ],
+    "url": "https://arxiv.org/abs/2310.06770",
+    "doi": "10.48550/arXiv.2310.06770",
+    "topics": [
+      "agents",
+      "evaluation",
+      "tool-use"
+    ],
+    "summary": "Introduced a software engineering benchmark grounded in real repositories, issues, and tests.",
+    "references": [
+      "openai-2023-gpt4",
+      "yao-2023-react",
+      "deng-2023-webarena"
+    ]
+  },
+  {
+    "id": "wang-2023-voyager",
+    "title": "Voyager: An Open-Ended Embodied Agent with Large Language Models",
+    "year": 2023,
+    "venue": "NeurIPS",
+    "authors": [
+      "Guanzhi Wang",
+      "Yuqi Xie",
+      "Chenlin Meng",
+      "Diyi Yang"
+    ],
+    "url": "https://arxiv.org/abs/2305.16291",
+    "doi": "10.48550/arXiv.2305.16291",
+    "topics": [
+      "agents",
+      "tool-use",
+      "reasoning"
+    ],
+    "summary": "Demonstrated curriculum-driven prompting and skill libraries for open-ended embodied agents.",
+    "references": [
+      "yao-2023-react",
+      "schick-2023-toolformer"
+    ]
+  },
+  {
+    "id": "guo-2024-self-discover",
+    "title": "Self-Discover: Large Language Models Self-Compose Reasoning Structures",
+    "year": 2024,
+    "venue": "ICLR",
+    "authors": [
+      "Daya Guo",
+      "Dejian Yang",
+      "Haowei Wang",
+      "Yongchao Li"
+    ],
+    "url": "https://arxiv.org/abs/2402.03620",
+    "doi": "10.48550/arXiv.2402.03620",
+    "topics": [
+      "reasoning",
+      "prompting",
+      "agents"
+    ],
+    "summary": "Learned task-specific reasoning scaffolds automatically rather than selecting a fixed prompt template.",
+    "references": [
+      "wei-2022-cot",
+      "yao-2023-tree-of-thoughts",
+      "yao-2023-react"
+    ]
+  }
+]
