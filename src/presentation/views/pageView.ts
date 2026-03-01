@@ -20,7 +20,7 @@ export function renderPageView(model: ContentPageViewModel): string {
   return `
     <article class="content-article">
       <header class="article-header">
-        <p class="eyebrow">${escapeHtml(page.section)} / ${escapeHtml(page.subsection)}</p>
+        <p class="eyebrow">Entry / ${escapeHtml(page.section)} / ${escapeHtml(page.subsection)}</p>
         <h1>${escapeHtml(page.title)}</h1>
         <p class="article-summary">${escapeHtml(page.summary)}</p>
         <p class="meta-row">
@@ -37,8 +37,8 @@ export function renderPageView(model: ContentPageViewModel): string {
         ${renderReferenceList(page.references)}
       </section>
       <section>
-        <h2>Related Pages</h2>
-        <div class="card-grid compact">${relatedMarkup}</div>
+        <h2>Continue Reading</h2>
+        <div class="catalog-stack compact">${relatedMarkup}</div>
       </section>
     </article>
     <aside class="article-toc-panel">

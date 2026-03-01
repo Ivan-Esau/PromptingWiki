@@ -4,37 +4,43 @@ import { renderPageCard } from '../components/pageCard';
 
 export function renderHomeView(model: HomeViewModel, sections: SectionMeta[]): string {
   const cards = model.recommended.map(renderPageCard).join('');
-  const sectionCards = sections
+  const sectionRows = sections
     .map(
-      (section) => `
-      <article class="overview-card">
-        <h2><a href="#/${section.key}">${section.title}</a></h2>
-        <p>${section.description}</p>
-      </article>
+      (section, index) => `
+      <li class="line-step">
+        <span class="line-index">${index + 1}</span>
+        <div class="line-content">
+          <h3><a href="#/${section.key}">${section.title}</a></h3>
+          <p>${section.description}</p>
+        </div>
+      </li>
     `
     )
     .join('');
 
   return `
-    <section class="hero">
-      <p class="eyebrow">Prompting Wiki</p>
-      <h1>Best-practice prompting, grounded in references and evaluated patterns.</h1>
+    <section class="hero library-hero">
+      <p class="eyebrow">Prompting Library</p>
+      <h1>A linear research library for prompting, agents, and evaluation.</h1>
       <p class="hero-copy">
-        This wiki is designed for product and engineering teams shipping LLM features.
-        Start with fundamentals, move into reusable patterns, and validate each prompt with explicit tests.
+        Browse this site as a curated collection: fundamentals first, patterns second, use cases third, then benchmarks and references.
+        Every entry is linked to source material and connected to the next decision in the workflow.
       </p>
-      <div class="hero-actions">
-        <a href="#/learn" class="action primary">Start Learning Path</a>
-        <a href="#/library" class="action secondary">Open Pattern Library</a>
+      <div class="hero-actions linear-actions">
+        <a href="#/learn" class="action primary">Start at Fundamentals</a>
+        <a href="#/references" class="action secondary">Open Source Catalog</a>
       </div>
     </section>
-    <section class="section-overview-grid">${sectionCards}</section>
-    <section>
+    <section class="linear-panel">
+      <h2>Library Route</h2>
+      <ol class="line-track">${sectionRows}</ol>
+    </section>
+    <section class="linear-panel">
       <div class="section-header-inline">
-        <h2>Recommended Starting Set</h2>
-        <p>Pages selected to move from baseline prompting to evaluation-ready workflows.</p>
+        <h2>Curator Picks</h2>
+        <p>Recommended pages to establish a complete prompting workflow from design to verification.</p>
       </div>
-      <div class="card-grid">${cards || '<p class="empty-state">No recommendations configured.</p>'}</div>
+      <div class="catalog-stack">${cards || '<p class="empty-state">No recommendations configured.</p>'}</div>
     </section>
   `;
 }

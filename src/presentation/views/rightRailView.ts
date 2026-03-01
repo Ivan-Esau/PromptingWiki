@@ -4,12 +4,12 @@ import { escapeHtml } from '../../utils/markdown';
 export function renderDefaultRightRail(): string {
   return `
     <section class="right-rail-card">
-      <h2>Build Loop</h2>
+      <h2>Reading Loop</h2>
       <ol>
-        <li>Define prompt objective.</li>
-        <li>Select a pattern from the library.</li>
-        <li>Run eval with fixed test cases.</li>
-        <li>Publish only with references and failure notes.</li>
+        <li>Start with fundamentals.</li>
+        <li>Select a pattern entry.</li>
+        <li>Review use-case and eval guidance.</li>
+        <li>Trace all claims to references.</li>
       </ol>
     </section>
   `;
@@ -22,7 +22,7 @@ export function renderRelatedRightRail(relatedPages: ContentPage[]): string {
 
   return `
     <section class="right-rail-card">
-      <h2>Related</h2>
+      <h2>Adjacent Entries</h2>
       ${links ? `<ul class="side-list">${links}</ul>` : '<p class="empty-state">No related links.</p>'}
     </section>
   `;

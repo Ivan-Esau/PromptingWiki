@@ -14,11 +14,11 @@ export function renderLibraryView(model: LibraryViewModel): string {
 
   return `
     <section class="section-intro">
-      <p class="eyebrow">Library</p>
-      <h1>Prompt Pattern and Use-Case Library</h1>
-      <p>Filter by task and technique, then open pages with prompt, eval setup, and references.</p>
+      <p class="eyebrow">Catalog</p>
+      <h1>Prompting Knowledge Catalog</h1>
+      <p>Use filters to narrow the collection, then read entries in a single linear stream.</p>
     </section>
-    <section class="filter-panel">
+    <section class="filter-panel linear-panel">
       <label>
         Search
         <input id="library-search" type="search" value="${escapeHtml(model.filters.search)}" placeholder="Search by task, pattern, or risk">
@@ -51,9 +51,9 @@ export function renderLibraryView(model: LibraryViewModel): string {
         </select>
       </label>
     </section>
-    <section>
+    <section class="linear-panel">
       <p class="results-count">${model.pages.length} results</p>
-      <div class="card-grid">${cards || '<p class="empty-state">No pages match the current filters.</p>'}</div>
+      <div class="catalog-stack">${cards || '<p class="empty-state">No pages match the current filters.</p>'}</div>
     </section>
   `;
 }

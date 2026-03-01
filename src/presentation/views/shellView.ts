@@ -15,9 +15,9 @@ function renderSectionLink(sectionKey: string, title: string, activeSection: Sec
 
 export function renderShellView(model: ShellViewModel, slots: ShellSlots): string {
   const topNav = model.sections
-    .map((section) => {
+    .map((section, index) => {
       const active = model.route.type === 'section' && model.route.section === section.key ? 'top-nav-link active' : 'top-nav-link';
-      return `<a href="#/${section.key}" class="${active}">${escapeHtml(section.title)}</a>`;
+      return `<a href="#/${section.key}" class="${active}"><span class="nav-order">${index + 1}</span>${escapeHtml(section.title)}</a>`;
     })
     .join('');
 
@@ -35,15 +35,15 @@ export function renderShellView(model: ShellViewModel, slots: ShellSlots): strin
       <header class="top-header">
         <div class="brand">
           <button type="button" class="menu-toggle" data-menu-toggle aria-label="Toggle menu">Menu</button>
-          <a href="#/" class="brand-link">Prompting Wiki</a>
+          <a href="#/" class="brand-link">Prompting Library</a>
         </div>
         <nav class="top-nav">${topNav}</nav>
       </header>
       <div class="layout-grid">
         <aside class="left-sidebar">
           <section class="side-panel">
-            <h2>Explore</h2>
-            <p class="side-panel-lead">Move from concept to pattern to evaluated production usage.</p>
+            <h2>Linear Guide</h2>
+            <p class="side-panel-lead">Read the library in sequence from fundamentals to evidence and glossary.</p>
             <nav class="section-nav">${sectionNav}</nav>
           </section>
           ${
