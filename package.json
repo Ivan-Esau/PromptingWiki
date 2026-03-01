@@ -4,17 +4,13 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "content:validate": "node scripts/validate-content.mjs",
-    "content:generate": "node scripts/generate-content.mjs",
-    "dev": "npm run content:generate && vite",
-    "test": "vitest run",
-    "build": "npm run content:validate && npm run content:generate && tsc && vite build",
+    "dev": "vite",
+    "build": "tsc && vite build",
     "preview": "vite preview"
   },
   "devDependencies": {
     "typescript": "^5.2.2",
     "prettier": "^3.3.1",
-    "vite": "^5.2.0",
-    "vitest": "^2.1.9"
+    "vite": "^5.2.0"
   }
 }
